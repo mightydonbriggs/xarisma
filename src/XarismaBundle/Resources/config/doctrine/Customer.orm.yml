@@ -1,0 +1,59 @@
+XarismaBundle\Entity\Customer:
+    type: entity
+    table: customer
+    
+#    The following should establish relationsip: One customer to Many Orders
+    oneToMany:
+        orders:
+            targetEntity: Custorder
+            mappedBy: Customer  
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: PK
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        customernumber:
+            type: string
+            nullable: false
+            length: 10
+            fixed: false
+            comment: 'Customer Number (From Import File)'
+            column: customerNumber
+        accountname:
+            type: string
+            nullable: false
+            length: 45
+            fixed: false
+            comment: 'Customer Account Name'
+            column: accountName
+        repname:
+            type: string
+            nullable: true
+            length: 40
+            fixed: false
+            comment: 'Name of Account Rep for this customer'
+            column: repName
+        datecreated:
+            type: datetime
+            nullable: true
+            comment: ''
+            default: CURRENT_TIMESTAMP
+            column: dateCreated
+        dateupdated:
+            type: datetime
+            nullable: true
+            comment: ''
+            column: dateUpdated
+        deleted:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Soft Delete. True= deleted'
+            default: '0'
+            column: Deleted
+    lifecycleCallbacks: {  }

@@ -1,0 +1,48 @@
+{% extends 'XarismaBundle:Default:base.html.twig' %}
+
+{% block body -%}
+    <h1>Worklog</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Stationstatus</th>
+                <td>{{ entity.stationstatus }}</td>
+            </tr>
+            <tr>
+                <th>Comments</th>
+                <td>{{ entity.comments }}</td>
+            </tr>
+            <tr>
+                <th>Datecreated</th>
+                <td>{{ entity.datecreated|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Dateupdated</th>
+                <td>{{ entity.dateupdated|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Deleted</th>
+                <td>{{ entity.deleted }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('worklog') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('worklog_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

@@ -1,0 +1,76 @@
+XarismaBundle\Entity\User:
+    type: entity
+    table: user
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        username:
+            type: string
+            nullable: false
+            length: 10
+            fixed: false
+            comment: ''
+        password:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+        firstname:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+            column: firstName
+        lastname:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+            column: lastName
+        accesslevel:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            column: accessLevel
+        roles:
+            type: string
+            nullable: true
+            length: 255
+            fixed: false
+            comment: ''
+        updateby:
+            type: integer
+            nullable: true
+            unsigned: false
+            comment: 'id from user table, update made by'
+            column: updateBy
+        datecreated:
+            type: datetime
+            nullable: true
+            comment: ''
+            default: CURRENT_TIMESTAMP
+            column: dateCreated
+        dateupdated:
+            type: datetime
+            nullable: true
+            comment: ''
+            column: dateUpdated
+        deleted:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Soft Delete. True= deleted'
+            default: '0'
+            column: Deleted
+    lifecycleCallbacks: {  }

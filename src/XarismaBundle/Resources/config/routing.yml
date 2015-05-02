@@ -1,0 +1,27 @@
+worklog:
+    resource: "@XarismaBundle/Resources/config/routing/worklog.yml"
+    prefix:   /worklog
+
+station:
+    resource: "@XarismaBundle/Resources/config/routing/station.yml"
+    prefix:   /station
+
+custorder:
+    resource: "@XarismaBundle/Resources/config/routing/custorder.yml"
+    prefix:   /custorder
+
+user:
+    resource: "@XarismaBundle/Resources/config/routing/user.yml"
+    prefix:   /user
+
+dictionary:
+    resource: "@XarismaBundle/Resources/config/routing/dictionary.yml"
+    prefix:   /dictionary
+
+customer:
+    resource: "@XarismaBundle/Resources/config/routing/customer.yml"
+    prefix:   /customer
+
+home:
+    path:     /
+    defaults: { _controller: XarismaBundle:Default:index }

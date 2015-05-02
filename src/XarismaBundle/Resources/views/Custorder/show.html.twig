@@ -1,0 +1,71 @@
+{% extends 'XarismaBundle:Default:base.html.twig' %}
+
+{% block body -%}
+    <h1>Customer Order Detail</h1>
+
+    <table class="record_properties table_details">
+        <tbody>
+            <tr>
+                <th>Customer</th>
+                <td>{{ entity.customer.accountname }}</td>
+            </tr>
+            <tr>
+                <th>Order #</th>
+                <td>{{ entity.ordernumber }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ entity.orderstatus }}</td>
+            </tr>
+            <tr>
+                <th>&nbsp;</th>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{{ entity.datecreated|date('Y-m-d H:i:s') }}</td>
+            </tr>
+                <th>Updated</th>
+                <td>{{ entity.dateupdated|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Update By</th>
+                <td>{{ entity.updateby }}</td>
+            </tr>
+        </tbody>
+    </table>
+            
+        <div class="notes_div">
+            {% if entity.notes %}
+              {% set notes=entity.notes %}
+            {% else %}
+              {% set notes = 'No notes for this record' %}
+            {% endif %}
+            <input type='textarea' class='textarea_notes' readonly='readonly' value='{{ notes }}' />
+        </div>
+
+    <hr />
+    <ul class="record_actions">
+    <li>
+        <a href="{{ path('custorder') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('custorder_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}
+
+{% block pagecss %}
+<style>
+ table.table_details { background-color: #cfcfcf; padding: 7px; }
+ table.table_details >tbody > tr > th { padding-right: 10px; }
+ div.notes_div {margin-top: 15px;}
+ .textarea_notes
+   { border:none; background-color: #cfcfcf;  width: 450px; height: 250px; }
+</style>
+{% endblock %}

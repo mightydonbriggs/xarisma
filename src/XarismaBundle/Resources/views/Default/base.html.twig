@@ -1,0 +1,112 @@
+{# src/XarismaBundle/Resources/views/Default/base.html.twig #}
+{# This is the base view from which all other Xarisma views are extended #}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>{% block title %}Xarisma{% endblock %}</title>
+    
+    <link href="{{ asset('css/bootstrap.min.css', version='3.1.1') }}" rel="stylesheet" />
+    <link href="{{ asset('css/bootstrapValidator.min.css', version='0.5.2') }}" rel="stylesheet" />
+    <link href="{{ asset('css/xarisma-root.css') }}" rel="stylesheet" />
+    <link rel="icon" href="{{ asset('img/favicon.ico') }}">
+    
+    {% javascripts '@XarismaBundle/Resources/public/js/*' %}
+    {# old IE support - see http://getbootstrap.com/getting-started/#template #}
+    <!--[if lt IE 9]>
+        <script src="{{ asset('js/lib/html5shiv.min.js', version='3.7.2') }}"></script>
+        <script src="{{ asset('js/lib/respond.min.js', version='1.4.2') }}"></script>
+    <![endif]-->
+    <script src="{{ asset('js/lib/jquery-1.11.0.min.js', version='1.11.0') }}"></script>
+    <script src="{{ asset('js/lib/jquery-ui-effects.min.js', version='1.11.0') }}"></script>
+    <script src="{{ asset('js/lib/bootstrap.min.js', version='3.1.1') }}"></script>
+    <script src="{{ asset('js/lib/bootstrapValidator.min.js', version='0.5.2') }}"></script>
+    <script src="{{ asset('js/lib/jquery.scrollTo.min.js', version='1.4.12') }}"></script>
+    <script>
+    // prevent IE from throwing "console is not defined error"
+    if (!window.console) window.console = { log: function() {} };
+    </script>
+    {% endjavascripts %}
+{% block head %}
+{% endblock %}
+</head>
+
+<body>
+
+{#Folowoing is Bootstrap Navbar from: http://getbootstrap.com/components/#navbar#}
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{{ path('home')}}">Xarisma</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+          <li class="active"><a href="#"><strong>Track</strong> <span class="sr-only">(current)</span></a></li>
+        <li><a href="{{ path('customer') }}">Customers</a></li>
+        <li><a href="{{ path('custorder') }}">Orders</a></li>
+        <li><a href="#">Reports</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="{{ path('user')}}">Users</a></li>
+            <li><a href="{{ path('station')}}">Stations</a></li>
+            <li class="divider"></li>
+            <li><a href="{{ path('dictionary')}}">Dictionary</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>    
+    
+    <div id="flash-notices">
+        {% for flashMessage in app.session.flashbag.get('error') %}
+            <div class="flash-error bg-danger">{{ flashMessage }}</div>
+        {% endfor %}
+
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+            <div class="flash-notice bg-info">{{ flashMessage }}</div>
+        {% endfor %}
+        
+
+    {% block canvas %}
+        {% block precontainer %}
+        {% endblock %}
+        <div class="container" id="main-container">
+{% block body %}
+{% endblock %}
+        </div>
+
+        <div id="footer"{% if nocontainer is not defined or not nocontainer %} class="container hidden-print"{% endif %}>
+            <hr />
+            <strong>Xarisma, Inc.</strong> 65 Shields Rd. Huntsville, AL 35811p: 256.429.9900f: 256.746.9525e: sales@xarisma.com
+        </div>
+    
+    {% endblock %}
+
+{% if (block('pagecss')) %}
+{% block pagecss %}
+{% endblock %}
+{% endif %}
+
+{% if (block('pagejs')) %}
+{% block pagejs %}
+{% endblock %}
+{% endif %}
+
+</body>
+</html>

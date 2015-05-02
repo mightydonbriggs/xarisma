@@ -1,0 +1,51 @@
+XarismaBundle\Entity\Station:
+    type: entity
+    table: station
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        stationcode:
+            type: string
+            nullable: false
+            length: 10
+            fixed: false
+            comment: ''
+            column: stationCode
+        description:
+            type: string
+            nullable: true
+            length: 255
+            fixed: false
+            comment: ''
+        notes:
+            type: string
+            nullable: true
+            length: 3000
+            fixed: false
+            comment: ''
+        datecreated:
+            type: datetime
+            nullable: true
+            comment: ''
+            default: CURRENT_TIMESTAMP
+            column: dateCreated
+        dateupdated:
+            type: datetime
+            nullable: true
+            comment: ''
+            column: dateUpdated
+        deleted:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Soft Delete. True= deleted'
+            default: '0'
+            column: Deleted
+    lifecycleCallbacks: {  }

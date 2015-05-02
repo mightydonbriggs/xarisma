@@ -1,0 +1,30 @@
+worklog:
+    path:     /
+    defaults: { _controller: "XarismaBundle:Worklog:index" }
+
+worklog_show:
+    path:     /{id}/show
+    defaults: { _controller: "XarismaBundle:Worklog:show" }
+
+worklog_new:
+    path:     /new
+    defaults: { _controller: "XarismaBundle:Worklog:new" }
+
+worklog_create:
+    path:     /create
+    defaults: { _controller: "XarismaBundle:Worklog:create" }
+    methods:  POST
+
+worklog_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "XarismaBundle:Worklog:edit" }
+
+worklog_update:
+    path:     /{id}/update
+    defaults: { _controller: "XarismaBundle:Worklog:update" }
+    methods:  [POST, PUT]
+
+worklog_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "XarismaBundle:Worklog:delete" }
+    methods:  [POST, DELETE]

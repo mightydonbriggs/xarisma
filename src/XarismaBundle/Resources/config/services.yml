@@ -1,0 +1,4 @@
+services:
+#    xarisma.example:
+#        class: XarismaBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

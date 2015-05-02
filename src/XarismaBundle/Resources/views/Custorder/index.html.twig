@@ -1,0 +1,45 @@
+{% extends 'XarismaBundle:Default:base.html.twig' %}
+
+{% block body -%}
+    <h1>Customer Order List</h1>
+
+    <table class="records_list table table-hover">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Customer #</th>
+                <th>Order #</th>
+                <th>Order Status</th>
+{#                <th>Actions</th>#}
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('custorder_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.customerId }}</td>
+                <td>{{ entity.ordernumber }}</td>
+                <td>{{ entity.orderstatus }}</td>
+{#                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('custorder_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('custorder_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>#}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('custorder_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

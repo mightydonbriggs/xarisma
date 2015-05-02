@@ -1,0 +1,80 @@
+XarismaBundle\Entity\Custorder:
+    type: entity
+    table: custorder
+  
+    
+#    The following should establish relation: Many Orders to one Customer
+    manyToOne:
+        customer:
+            targetEntity: Customer
+            inversedBy: orders
+            joinColumn:
+                name: customer_id
+                referencedColumnName: id              
+                
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        customerId:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'id from customer table'
+            column: customer_id
+        ordernumber:
+            type: string
+            nullable: false
+            length: 8
+            fixed: false
+            comment: 'Order Number (From Import File)'
+            column: orderNumber
+        orderdate:
+            type: datetime
+            nullable: true
+            comment: 'Date order was entered into Netsuite'
+            column: orderdate
+        orderstatus:
+            type: string
+            nullable: true
+            length: 100
+            fixed: false
+            comment: ''
+            column: orderStatus
+        notes:
+            type: string
+            nullable: true
+            length: 3000
+            fixed: false
+            comment: ''
+        updateby:
+            type: integer
+            nullable: true
+            unsigned: false
+            comment: 'id from user table, update made by'
+            column: updateBy
+        datecreated:
+            type: datetime
+            nullable: true
+            comment: ''
+            default: CURRENT_TIMESTAMP
+            column: dateCreated
+        dateupdated:
+            type: datetime
+            nullable: true
+            comment: ''
+            column: dateUpdated
+        deleted:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Soft Delete. True= deleted'
+            default: '0'
+            column: Deleted
+    lifecycleCallbacks: {  }

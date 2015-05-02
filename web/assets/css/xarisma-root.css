@@ -1,0 +1,12 @@
+/*
+This is the base .css file for the Xarisma site. All of the common styles are
+defined here.
+*/
+/* 
+    Created on : Mar 28, 2015, 3:15:56 PM
+    Author     : dbriggs
+*/
+
+.table-hover tbody tr:hover > td.success {
+  background-color: #d0e9c6 !important;
+}

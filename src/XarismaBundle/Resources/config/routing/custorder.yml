@@ -1,0 +1,30 @@
+custorder:
+    path:     /
+    defaults: { _controller: "XarismaBundle:Custorder:index" }
+
+custorder_show:
+    path:     /{id}/show
+    defaults: { _controller: "XarismaBundle:Custorder:show" }
+
+custorder_new:
+    path:     /new
+    defaults: { _controller: "XarismaBundle:Custorder:new" }
+
+custorder_create:
+    path:     /create
+    defaults: { _controller: "XarismaBundle:Custorder:create" }
+    methods:  POST
+
+custorder_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "XarismaBundle:Custorder:edit" }
+
+update:
+    path:     /{id}/update
+    defaults: { _controller: "XarismaBundle:Custorder:update" }
+    methods:  [POST, PUT]
+
+custorder_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "XarismaBundle:Custorder:delete" }
+    methods:  [POST, DELETE]

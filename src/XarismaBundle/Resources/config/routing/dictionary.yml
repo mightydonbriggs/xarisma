@@ -1,0 +1,30 @@
+dictionary:
+    path:     /
+    defaults: { _controller: "XarismaBundle:Dictionary:index" }
+
+dictionary_show:
+    path:     /{id}/show
+    defaults: { _controller: "XarismaBundle:Dictionary:show" }
+
+dictionary_new:
+    path:     /new
+    defaults: { _controller: "XarismaBundle:Dictionary:new" }
+
+dictionary_create:
+    path:     /create
+    defaults: { _controller: "XarismaBundle:Dictionary:create" }
+    methods:  POST
+
+dictionary_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "XarismaBundle:Dictionary:edit" }
+
+dictionary_update:
+    path:     /{id}/update
+    defaults: { _controller: "XarismaBundle:Dictionary:update" }
+    methods:  [POST, PUT]
+
+dictionary_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "XarismaBundle:Dictionary:delete" }
+    methods:  [POST, DELETE]

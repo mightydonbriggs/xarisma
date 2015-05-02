@@ -1,0 +1,58 @@
+XarismaBundle\Entity\Worklog:
+    type: entity
+    table: worklog
+    
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        station_id:
+            type: integer
+            nullable: true
+            unsigned: false
+        order_id:
+            type: integer
+            nullable: true
+            unsigned: false
+        user_id:
+            type: integer
+            nullable: true
+            unsigned: false
+        stationstatus:
+            type: string
+            nullable: true
+            length: 10
+            fixed: false
+            comment: 'Status of this order at this station'
+            column: stationStatus
+        comments:
+            type: string
+            nullable: true
+            length: 255
+            fixed: false
+            comment: ''
+        datecreated:
+            type: datetime
+            nullable: true
+            comment: ''
+            default: CURRENT_TIMESTAMP
+            column: dateCreated
+        dateupdated:
+            type: datetime
+            nullable: true
+            comment: ''
+            column: dateUpdated
+        deleted:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Soft Delete. True= deleted'
+            default: '0'
+            column: Deleted
+    lifecycleCallbacks: {  }
