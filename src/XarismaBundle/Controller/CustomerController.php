@@ -21,10 +21,19 @@ class CustomerController extends Controller
      */
     public function indexAction()
     {
+        
         $em = $this->getDoctrine()->getManager();
+        
+        $dql = 'SELECT c.id, c.accountname, c.customernumber, c.repname '
+             . 'FROM XarismaBundle:Customer c WHERE c.deleted = 0';
+        $query = $em->createQuery($dql);
+        
+        $entities = $query->getResult();
 
-        $entities = $em->getRepository('XarismaBundle:Customer')->findAll();
-
+//dump($query);
+//dump($result);
+//die();        
+        
         return $this->render('XarismaBundle:Customer:index.html.twig', array(
             'entities' => $entities,
         ));
