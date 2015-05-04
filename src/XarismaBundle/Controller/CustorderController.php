@@ -22,8 +22,15 @@ class CustorderController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('XarismaBundle:Custorder')->findAll(array('deleted' => 0));
+        $qb = $em->createQueryBuilder();
+        
+        $qb->select('co.id, co.ordernumber, co.orderdate, co.orderstatus, cu.accountname, cu.repname')
+           ->from('XarismaBundle:Custorder', 'co')
+           ->leftJoin('co.customer', 'cu')
+           ->where('co.deleted = 0');
+                
+        $query = $qb->getQuery();
+        $entities = $query->getResult();
 
         return $this->render('XarismaBundle:Custorder:index.html.twig', array(
             'entities' => $entities,

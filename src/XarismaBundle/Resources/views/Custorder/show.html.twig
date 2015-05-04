@@ -2,16 +2,24 @@
 
 {% block body -%}
     <h1>Customer Order Detail</h1>
-
+    
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('custorder') }}">
+                Back to the list
+            </a>
+        </li>
+    </ul>
+                
     <table class="record_properties table_details">
         <tbody>
             <tr>
-                <th>Customer</th>
-                <td>{{ entity.customer.accountname }}</td>
+                <th>Order #</th>
+                <td><strong>{{ entity.ordernumber }}</strong></td>
             </tr>
             <tr>
-                <th>Order #</th>
-                <td>{{ entity.ordernumber }}</td>
+                <th>Customer</th>
+                <td>{{ entity.customer.accountname }}</td>
             </tr>
             <tr>
                 <th>Status</th>
@@ -44,19 +52,12 @@
             <input type='textarea' class='textarea_notes' readonly='readonly' value='{{ notes }}' />
         </div>
 
-    <hr />
-    <ul class="record_actions">
+<ul class="record_actions">
     <li>
         <a href="{{ path('custorder') }}">
             Back to the list
         </a>
     </li>
-    <li>
-        <a href="{{ path('custorder_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
 </ul>
 {% endblock %}
 

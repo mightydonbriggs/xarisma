@@ -1,54 +1,52 @@
 {% extends 'XarismaBundle:Default:base.html.twig' %}
 
 {% block body -%}
-    <h1>Customer</h1>
+    <h1>Customer Details</h1>
 
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('custorder') }}">
+                Back to the list
+            </a>
+        </li>
+    </ul>
+            
     <table class="record_properties">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
+                <th>Customer</th>
+                <td><strong>{{ entity.accountname }}</strong></td>
             </tr>
             <tr>
-                <th>Customernumber</th>
+                <th>Customer #</th>
                 <td>{{ entity.customernumber }}</td>
             </tr>
             <tr>
-                <th>Accountname</th>
-                <td>{{ entity.accountname }}</td>
+                <td>Id:{{ entity.id }}</td>
+                <td>&nbsp;</td>
             </tr>
+            <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
             <tr>
                 <th>Repname</th>
-                <td>{{ entity.repname }}</td>
+                <td>{% if entity.repname%}{{ entity.repname }}{% else%}N/A{% endif %}</td>
             </tr>
+            <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
             <tr>
-                <th>Datecreated</th>
+                <th>Created</th>
                 <td>{{ entity.datecreated|date('Y-m-d H:i:s') }}</td>
             </tr>
             <tr>
-                <th>Dateupdated</th>
+                <th>Updated</th>
                 <td>{{ entity.dateupdated|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Deleted</th>
-                <td>{{ entity.deleted }}</td>
             </tr>
         </tbody>
     </table>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('customer') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('customer_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
-    <hr />
-    {{ dump(entity) }}
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('customer') }}">
+                Back to the list
+            </a>
+        </li>
+    </ul>
 {% endblock %}
