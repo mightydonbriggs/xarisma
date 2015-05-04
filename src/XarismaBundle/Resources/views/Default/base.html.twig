@@ -9,27 +9,27 @@
     
     <title>{% block title %}Xarisma{% endblock %}</title>
     
-    <link href="{{ asset('css/bootstrap.min.css', version='3.1.1') }}" rel="stylesheet" />
-    <link href="{{ asset('css/bootstrapValidator.min.css', version='0.5.2') }}" rel="stylesheet" />
-    <link href="{{ asset('css/xarisma-root.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/css/bootstrap.min.css', version='3.1.1') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/css/bootstrapValidator.min.css', version='0.5.2') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/css/xarisma-root.css') }}" rel="stylesheet" />
     <link rel="icon" href="{{ asset('img/favicon.ico') }}">
     
-    {% javascripts '@XarismaBundle/Resources/public/js/*' %}
-    {# old IE support - see http://getbootstrap.com/getting-started/#template #}
     <!--[if lt IE 9]>
-        <script src="{{ asset('js/lib/html5shiv.min.js', version='3.7.2') }}"></script>
-        <script src="{{ asset('js/lib/respond.min.js', version='1.4.2') }}"></script>
+        <script src="{{ asset('assets/js/lib/html5shiv.min.js', version='3.7.2') }}"></script>
+        <script src="{{ asset('assets/js/lib/respond.min.js', version='1.4.2') }}"></script>
     <![endif]-->
-    <script src="{{ asset('js/lib/jquery-1.11.0.min.js', version='1.11.0') }}"></script>
-    <script src="{{ asset('js/lib/jquery-ui-effects.min.js', version='1.11.0') }}"></script>
-    <script src="{{ asset('js/lib/bootstrap.min.js', version='3.1.1') }}"></script>
-    <script src="{{ asset('js/lib/bootstrapValidator.min.js', version='0.5.2') }}"></script>
-    <script src="{{ asset('js/lib/jquery.scrollTo.min.js', version='1.4.12') }}"></script>
+    <script src="{{ asset('assets/js/lib/jquery-1.11.0.min.js', version='1.11.0') }}"></script>
+    <script src="{{ asset('assets/js/lib/jquery-ui-effects.min.js', version='1.11.0') }}"></script>
+    <script src="{{ asset('assets/js/lib/bootstrap.min.js', version='3.1.1') }}"></script>
+    <script src="{{ asset('assets/js/lib/bootstrapValidator.min.js', version='0.5.2') }}"></script>
+    <script src="{{ asset('assets/js/lib/jquery.scrollTo.min.js', version='1.4.12') }}"></script>
     <script>
     // prevent IE from throwing "console is not defined error"
     if (!window.console) window.console = { log: function() {} };
     </script>
-    {% endjavascripts %}
+        
+{#    {% javascripts '@XarismaBundle/Resources/public/js/*' %}#}
+{#    {% endjavascripts %}#}
 {% block head %}
 {% endblock %}
 </head>
