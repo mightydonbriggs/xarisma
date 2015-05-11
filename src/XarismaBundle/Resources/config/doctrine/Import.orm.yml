@@ -1,0 +1,92 @@
+XarismaBundle\Entity\Import:
+    type: entity
+    table: import
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        importTime:
+            type: datetime
+            nullable: true
+            comment: ''
+            column: dateUpdated
+            comment: 'Time import file was processed'       
+        filename:
+            type: string
+            nullable: true
+            length: 255
+            fixed: false
+            comment: 'Name of imported file'
+        md5:
+            type: string
+            nullable: true
+            length: 255
+            fixed: false
+            comment: 'MD5 of file contents'
+        status:
+            type: string
+            nullable: true
+            length: 50
+            fixed: false
+            comment: 'Status result of import'
+        recs:
+            type: integer
+            nullable: true
+            length: 5
+            default: 0
+            comment: 'Number of records processed'
+        errors:
+            type: integer
+            nullable: true
+            length: 5
+            default: 0
+            comment: 'Number of errors during import'
+        customerNew:
+            type: integer
+            nullable: true
+            length: 5
+            default: 0
+            comment: 'Customer records created'
+        customerUpdate:
+            type: integer
+            nullable: true
+            length: 5
+            default: 0
+            comment: 'Customer records updated'
+        orderNew:
+            type: integer
+            nullable: true
+            length: 5
+            default: 0
+            comment: 'Number of order records created'
+        orderUpdate:
+            type: integer
+            nullable: true
+            length: 5
+            default: 0
+            comment: 'Number of order records updated'
+     
+        datecreated:
+            type: datetime
+            nullable: true
+            comment: ''
+            default: CURRENT_TIMESTAMP
+            column: dateCreated
+        dateupdated:
+            type: datetime
+            nullable: true
+            comment: ''
+            column: dateUpdated
+        deleted:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Soft Delete. True= deleted'
+            default: '0'
+            column: Deleted
