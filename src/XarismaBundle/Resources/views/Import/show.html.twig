@@ -1,0 +1,70 @@
+{% extends 'XarismaBundle:Default:base.html.twig' %}
+
+{% block body -%}
+    <h1>Import Job Details</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Import Time</th>
+                <th>{{ entity.importTime|date('Y-m-d H:i:s') }}</th>
+            </tr>
+            <tr>
+                <th>Filename</th>
+                <td>{{ entity.filename }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ entity.status }}</td>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Md5</th>
+                <td>{{ entity.md5 }}</td>
+            </tr>
+            <tr>
+                <th>Recs</th>
+                <td>{{ entity.recs }}</td>
+            </tr>
+            <tr>
+                <th>Errors</th>
+                <td>{{ entity.errors }}</td>
+            </tr>
+            <tr>
+                <th>Customernew</th>
+                <td>{{ entity.customerNew }}</td>
+            </tr>
+            <tr>
+                <th>Customerupdate</th>
+                <td>{{ entity.customerUpdate }}</td>
+            </tr>
+            <tr>
+                <th>Ordernew</th>
+                <td>{{ entity.orderNew }}</td>
+            </tr>
+            <tr>
+                <th>Orderupdate</th>
+                <td>{{ entity.orderUpdate }}</td>
+            </tr>
+            <tr>
+                <th>Datecreated</th>
+                <td>{{ entity.datecreated|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Dateupdated</th>
+                <td>{{ entity.dateupdated|date('Y-m-d H:i:s') }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('import') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

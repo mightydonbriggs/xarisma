@@ -1,3 +1,7 @@
+xarisma_import:
+    resource: "@XarismaBundle/Resources/config/routing/import.yml"
+    prefix:   /import
+
 worklog:
     resource: "@XarismaBundle/Resources/config/routing/worklog.yml"
     prefix:   /worklog

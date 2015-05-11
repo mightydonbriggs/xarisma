@@ -1,17 +1,10 @@
 XarismaBundle\Entity\Custorder:
     type: entity
     table: custorder
-  
-    
-#    The following should establish relation: Many Orders to one Customer
-    manyToOne:
-        customer:
-            targetEntity: Customer
-            inversedBy: orders
-            joinColumn:
-                name: customer_id
-                referencedColumnName: id              
-                
+    indexes:
+        IDX_196FD7DF9395C3F3:
+            columns:
+                - customer_id
     id:
         id:
             type: integer
@@ -22,24 +15,17 @@ XarismaBundle\Entity\Custorder:
             generator:
                 strategy: IDENTITY
     fields:
-        customerId:
-            type: integer
-            nullable: false
-            unsigned: false
-            comment: 'id from customer table'
-            column: customer_id
         ordernumber:
             type: string
             nullable: false
             length: 8
             fixed: false
-            comment: 'Order Number (From Import File)'
+            comment: ''
             column: orderNumber
         orderdate:
             type: datetime
             nullable: true
-            comment: 'Date order was entered into Netsuite'
-            column: orderdate
+            comment: ''
         orderstatus:
             type: string
             nullable: true
@@ -57,13 +43,12 @@ XarismaBundle\Entity\Custorder:
             type: integer
             nullable: true
             unsigned: false
-            comment: 'id from user table, update made by'
+            comment: ''
             column: updateBy
         datecreated:
             type: datetime
             nullable: true
             comment: ''
-            default: CURRENT_TIMESTAMP
             column: dateCreated
         dateupdated:
             type: datetime
@@ -74,7 +59,16 @@ XarismaBundle\Entity\Custorder:
             type: integer
             nullable: false
             unsigned: false
-            comment: 'Soft Delete. True= deleted'
-            default: '0'
+            comment: ''
             column: Deleted
+    manyToOne:
+        customer:
+            targetEntity: Customer
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                customer_id:
+                    referencedColumnName: id
+            orphanRemoval: false
     lifecycleCallbacks: {  }

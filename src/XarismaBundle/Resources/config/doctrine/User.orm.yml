@@ -53,13 +53,12 @@ XarismaBundle\Entity\User:
             type: integer
             nullable: true
             unsigned: false
-            comment: 'id from user table, update made by'
+            comment: ''
             column: updateBy
         datecreated:
             type: datetime
             nullable: true
             comment: ''
-            default: CURRENT_TIMESTAMP
             column: dateCreated
         dateupdated:
             type: datetime
@@ -70,7 +69,6 @@ XarismaBundle\Entity\User:
             type: integer
             nullable: false
             unsigned: false
-            comment: 'Soft Delete. True= deleted'
-            default: '0'
+            comment: ''
             column: Deleted
     lifecycleCallbacks: {  }

@@ -321,4 +321,20 @@ class Worklog
     {
         return $this->user_id;
     }
+    /**
+     * @var integer
+     */
+    private $stationId;
+
+    /**
+     * @var integer
+     */
+    private $orderId;
+
+    /**
+     * @var integer
+     */
+    private $userId;
+
+
 }

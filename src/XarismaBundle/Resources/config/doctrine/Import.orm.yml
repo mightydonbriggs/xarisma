@@ -15,7 +15,7 @@ XarismaBundle\Entity\Import:
             type: datetime
             nullable: true
             comment: ''
-            column: dateUpdated
+            column: importTime
             comment: 'Time import file was processed'       
         filename:
             type: string

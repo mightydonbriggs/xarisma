@@ -1,7 +1,6 @@
 XarismaBundle\Entity\Worklog:
     type: entity
     table: worklog
-    
     id:
         id:
             type: integer
@@ -12,24 +11,30 @@ XarismaBundle\Entity\Worklog:
             generator:
                 strategy: IDENTITY
     fields:
-        station_id:
+        stationId:
             type: integer
             nullable: true
             unsigned: false
-        order_id:
+            comment: ''
+            column: station_id
+        orderId:
             type: integer
             nullable: true
             unsigned: false
-        user_id:
+            comment: ''
+            column: order_id
+        userId:
             type: integer
             nullable: true
             unsigned: false
+            comment: ''
+            column: user_id
         stationstatus:
             type: string
             nullable: true
             length: 10
             fixed: false
-            comment: 'Status of this order at this station'
+            comment: ''
             column: stationStatus
         comments:
             type: string
@@ -41,7 +46,6 @@ XarismaBundle\Entity\Worklog:
             type: datetime
             nullable: true
             comment: ''
-            default: CURRENT_TIMESTAMP
             column: dateCreated
         dateupdated:
             type: datetime
@@ -52,7 +56,6 @@ XarismaBundle\Entity\Worklog:
             type: integer
             nullable: false
             unsigned: false
-            comment: 'Soft Delete. True= deleted'
-            default: '0'
+            comment: ''
             column: Deleted
     lifecycleCallbacks: {  }

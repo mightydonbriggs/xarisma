@@ -33,7 +33,6 @@ XarismaBundle\Entity\Dictionary:
             type: datetime
             nullable: true
             comment: ''
-            default: CURRENT_TIMESTAMP
             column: dateCreated
         dateupdated:
             type: datetime
@@ -44,7 +43,6 @@ XarismaBundle\Entity\Dictionary:
             type: integer
             nullable: false
             unsigned: false
-            comment: 'Soft Delete. True= deleted'
-            default: '0'
+            comment: ''
             column: Deleted
     lifecycleCallbacks: {  }

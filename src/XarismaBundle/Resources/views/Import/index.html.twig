@@ -1,0 +1,58 @@
+{% extends 'XarismaBundle:Default:base.html.twig' %}
+
+{% block body -%}
+    <h1>Import Job History</h1>
+    <hr />
+    <table class="records_list table">
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th colspan='2'><center>Customer</center></th>
+                <th colspan='2'><center>Order</center></th>
+            </tr>
+            <tr>
+                <th>Import&nbsp;Time</th>
+                <th>Filename</th>
+                <th>Result</th>
+                <th>Recs</th>
+                <th>Errors</th>
+                <th>New</th>
+                <th>Update</th>
+                <th>New</th>
+                <th>Update</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            {% if entity.importTime %}
+                {% set importTime=entity.importTime|date('M-d H:i') %}
+            {% else %}
+                {% set importTime='Unknown' %}
+            {% endif %}
+            <tr>
+                <td><a href="{{ path('import_show', { 'id': entity.id }) }}">{{ importTime }}</a></td>
+                <td>{{ entity.filename }}</td>
+                <td>{{ entity.status }}</td>
+                <td>{{ entity.recs }}</td>
+                <td>{{ entity.errors }}</td>
+                <td>{{ entity.customerNew }}</td>
+                <td>{{ entity.customerUpdate }}</td>
+                <td>{{ entity.orderNew }}</td>
+                <td>{{ entity.orderUpdate }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('import_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}
