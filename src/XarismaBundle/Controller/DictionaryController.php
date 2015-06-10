@@ -2,8 +2,7 @@
 
 namespace XarismaBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use XarismaBundle\Controller\BaseController;
 
 use XarismaBundle\Entity\Dictionary;
 use XarismaBundle\Form\DictionaryType;
@@ -12,7 +11,7 @@ use XarismaBundle\Form\DictionaryType;
  * Dictionary controller.
  *
  */
-class DictionaryController extends Controller
+class DictionaryController extends BaseController
 {
 
     /**
@@ -21,9 +20,7 @@ class DictionaryController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('XarismaBundle:Dictionary')->findAll();
+        $entities = $this->getRepo('Dictionary')->findAll();
 
         return $this->render('XarismaBundle:Dictionary:index.html.twig', array(
             'entities' => $entities,
@@ -93,9 +90,7 @@ class DictionaryController extends Controller
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('XarismaBundle:Dictionary')->find($id);
+        $entity = $this->getRepo('Dictionary')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Dictionary entity.');
@@ -115,9 +110,7 @@ class DictionaryController extends Controller
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('XarismaBundle:Dictionary')->find($id);
+        $entity = $this->getRepo('Dictionary')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Dictionary entity.');
@@ -157,9 +150,7 @@ class DictionaryController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('XarismaBundle:Dictionary')->find($id);
+        $entity = $this->getRepo('Dictionary')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Dictionary entity.');
@@ -191,8 +182,7 @@ class DictionaryController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('XarismaBundle:Dictionary')->find($id);
+            $entity = $this->getRepo('Dictionary')->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Dictionary entity.');

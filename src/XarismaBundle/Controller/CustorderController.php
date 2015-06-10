@@ -2,8 +2,7 @@
 
 namespace XarismaBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use XarismaBundle\Controller\BaseController; 
 
 use XarismaBundle\Entity\Custorder;
 use XarismaBundle\Form\CustorderType;
@@ -12,7 +11,7 @@ use XarismaBundle\Form\CustorderType;
  * Custorder controller.
  *
  */
-class CustorderController extends Controller
+class CustorderController extends BaseController
 {
 
     /**
@@ -100,9 +99,7 @@ class CustorderController extends Controller
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('XarismaBundle:Custorder')->find($id);
+        $entity = $this->getRepo('Custorder')->find($id);
         $entity->getCustomer()->getAccountname();
 
         if (!$entity) {
@@ -123,9 +120,7 @@ class CustorderController extends Controller
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('XarismaBundle:Custorder')->find($id);
+        $entity = $this->getRepo('Custorder')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Custorder entity.');
@@ -165,9 +160,7 @@ class CustorderController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('XarismaBundle:Custorder')->find($id);
+        $entity = $this->getRepo('Custorder')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Custorder entity.');
@@ -199,8 +192,7 @@ class CustorderController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('XarismaBundle:Custorder')->find($id);
+            $entity = $this->getRepo('Custorder')->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Custorder entity.');

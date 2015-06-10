@@ -2,8 +2,7 @@
 
 namespace XarismaBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use XarismaBundle\Controller\BaseController;
 
 use XarismaBundle\Entity\Station;
 use XarismaBundle\Form\StationType;
@@ -12,7 +11,7 @@ use XarismaBundle\Form\StationType;
  * Station controller.
  *
  */
-class StationController extends Controller
+class StationController extends BaseController
 {
 
     /**
@@ -21,9 +20,7 @@ class StationController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('XarismaBundle:Station')->findAll();
+        $entities = $this->getRepo('Station')->findAll();
 
         return $this->render('XarismaBundle:Station:index.html.twig', array(
             'entities' => $entities,
@@ -93,9 +90,7 @@ class StationController extends Controller
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('XarismaBundle:Station')->find($id);
+        $entity = $this->getRepo('Station')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Station entity.');
@@ -115,9 +110,7 @@ class StationController extends Controller
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('XarismaBundle:Station')->find($id);
+        $entity = $this->getRepo('Station')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Station entity.');
@@ -157,9 +150,7 @@ class StationController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('XarismaBundle:Station')->find($id);
+        $entity = $this->getRepo('Station')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Station entity.');
@@ -191,8 +182,7 @@ class StationController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('XarismaBundle:Station')->find($id);
+            $entity = $this->getRepo('Station')->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Station entity.');

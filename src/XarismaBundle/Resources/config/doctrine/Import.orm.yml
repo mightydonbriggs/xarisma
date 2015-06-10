@@ -1,6 +1,8 @@
 XarismaBundle\Entity\Import:
     type: entity
     table: import
+#    repositoryClass: IRB\DefaultBundle\Entity\FundingSrcRepository
+    repositoryClass: XarismaBundle\Entity\ImportRepository
     id:
         id:
             type: integer

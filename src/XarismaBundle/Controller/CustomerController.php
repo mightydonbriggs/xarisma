@@ -2,8 +2,7 @@
 
 namespace XarismaBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use XarismaBundle\Controller\BaseController;
 
 use XarismaBundle\Entity\Customer;
 use XarismaBundle\Form\CustomerType;
@@ -12,7 +11,7 @@ use XarismaBundle\Form\CustomerType;
  * Customer controller.
  *
  */
-class CustomerController extends Controller
+class CustomerController extends BaseController
 {
 
     /**
@@ -102,9 +101,7 @@ class CustomerController extends Controller
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('XarismaBundle:Customer')->find($id);
+        $entity = $this->getRepo('Customer')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Customer entity.');
@@ -124,9 +121,8 @@ class CustomerController extends Controller
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('XarismaBundle:Customer')->find($id);
+        $entity = $this->getRepo('Customer')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Customer entity.');
@@ -166,9 +162,8 @@ class CustomerController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('XarismaBundle:Customer')->find($id);
+        $entity = $this->getRepo('Customer')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Customer entity.');
@@ -200,8 +195,7 @@ class CustomerController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('XarismaBundle:Customer')->find($id);
+            $entity = $this->getRepo('Customer')->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Customer entity.');
