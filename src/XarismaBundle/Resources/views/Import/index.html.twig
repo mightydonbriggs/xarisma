@@ -35,7 +35,7 @@
             {% endif %}
             <tr>
                 <td><a href="{{ path('import_show', { 'id': entity.id }) }}">{{ importTime }}</a></td>
-                <td>{{ entity.filename }}</td>
+                <td>{{ entity.filename|split('/')|last}}</td>
                 <td>{{ entity.status }}</td>
                 <td>{{ entity.recs }}</td>
                 <td>{{ entity.errors }}</td>

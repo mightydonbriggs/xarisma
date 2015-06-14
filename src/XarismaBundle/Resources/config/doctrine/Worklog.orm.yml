@@ -1,6 +1,8 @@
 XarismaBundle\Entity\Worklog:
     type: entity
     table: worklog
+    repositoryClass: XarismaBundle\Entity\WorklogRepository
+    
     id:
         id:
             type: integer

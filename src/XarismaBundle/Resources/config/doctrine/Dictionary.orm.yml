@@ -1,6 +1,8 @@
 XarismaBundle\Entity\Dictionary:
     type: entity
     table: dictionary
+    repositoryClass: XarismaBundle\Entity\DictionaryRepository
+    
     id:
         id:
             type: integer

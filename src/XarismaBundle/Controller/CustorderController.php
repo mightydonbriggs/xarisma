@@ -15,21 +15,12 @@ class CustorderController extends BaseController
 {
 
     /**
-     * Lists all Custorder entities.
+     * Lists all Custorder records.
      *
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $qb = $em->createQueryBuilder();
-        
-        $qb->select('co.id, co.ordernumber, co.orderdate, co.orderstatus, cu.accountname, cu.repname')
-           ->from('XarismaBundle:Custorder', 'co')
-           ->leftJoin('co.customer', 'cu')
-           ->where('co.deleted = 0');
-                
-        $query = $qb->getQuery();
-        $entities = $query->getResult();
+        $entities = $this->getRepo('Custorder')->getArrayList();
 
         return $this->render('XarismaBundle:Custorder:index.html.twig', array(
             'entities' => $entities,

@@ -1,6 +1,8 @@
 XarismaBundle\Entity\Customer:
     type: entity
     table: customer
+    repositoryClass: XarismaBundle\Entity\CustomerRepository
+
     id:
         id:
             type: integer

@@ -1,6 +1,8 @@
 XarismaBundle\Entity\Station:
     type: entity
     table: station
+    repositoryClass: XarismaBundle\Entity\StationRepository
+    
     id:
         id:
             type: integer

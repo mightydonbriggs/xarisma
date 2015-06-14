@@ -1,6 +1,8 @@
 XarismaBundle\Entity\Custorder:
     type: entity
     table: custorder
+    repositoryClass: XarismaBundle\Entity\CustorderRepository
+    
     indexes:
         IDX_196FD7DF9395C3F3:
             columns:

@@ -9,6 +9,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Custorder
 {
+    public static $STATUS_RECEIVED      = "RECEIVED";
+    public static $STATUS_HOLD_CUST     = "HOLD_CUST";
+    public static $STATUS_HOLD_MATERIAL = "HOLD_MATERIAL";
+    public static $STATUS_HOLD_OTHER    = "HOLD_OTHER";
+    public static $STATUS_PRODUCTION    = "PRODUCTION";
+    public static $STATUS_SHIP_READY    = "SHIP_READY";
+    public static $STATUS_SHIPED        = "SHIPED";
+    
     /**
      * @var integer
      */

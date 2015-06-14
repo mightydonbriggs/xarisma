@@ -16,8 +16,8 @@
         {% for entity in entities %}
             <tr>
                 <td><a href="{{ path('custorder_show', { 'id': entity.id }) }}">{{ entity.ordernumber }}</a></td>
-                <td>{{ entity.accountname }}</td>
-                <td>{{ entity.orderdate }}</td>
+                <td>{{ entity.customername }}</td>
+                <td>{{ entity.orderdate|date('Y-m-d') }}</td>
                 <td>{{ entity.orderstatus }}</td>
             </tr>
         {% endfor %}

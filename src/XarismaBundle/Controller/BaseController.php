@@ -4,6 +4,7 @@ namespace XarismaBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
+
 class BaseController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
 {
     /**
