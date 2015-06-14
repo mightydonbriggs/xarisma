@@ -7,14 +7,14 @@ use XarismaBundle\Entity\BaseRepository;
  * Repository for Import Object.
  * 
  */
-class ImportRepository extends BaseRepository
+class FileopsRepository extends BaseRepository
 {
     /**
      * Determine if an md5 is unique
      * 
      * This function will determine if an md5 passed as a 
      * parameter, already exists in the import table, indicating
-     * that this import file has already been processed. It will
+     * that this file has already been processed. It will
      * retun a True if the md5 is not already in the database,
      * and a False otherwise.
      * 

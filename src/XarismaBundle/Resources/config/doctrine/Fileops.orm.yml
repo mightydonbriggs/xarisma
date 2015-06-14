@@ -1,7 +1,7 @@
-XarismaBundle\Entity\Import:
+XarismaBundle\Entity\Fileops:
     type: entity
-    table: import
-    repositoryClass: XarismaBundle\Entity\ImportRepository
+    table: fileops
+    repositoryClass: XarismaBundle\Entity\FileopsRepository
     
     id:
         id:
@@ -13,18 +13,24 @@ XarismaBundle\Entity\Import:
             generator:
                 strategy: IDENTITY
     fields:
-        importTime:
+        action:
+            type: string
+            mullable: no
+            length: 1
+            fixed: false
+            comment: 'Is this operation an Import or Export'
+        eventTime:
             type: datetime
             nullable: true
             comment: ''
-            column: importTime
-            comment: 'Time import file was processed'       
+            column: eventTime
+            comment: 'Time file was processed'       
         filename:
             type: string
             nullable: true
             length: 255
             fixed: false
-            comment: 'Name of imported file'
+            comment: 'Name of file'
         md5:
             type: string
             nullable: true
@@ -36,7 +42,7 @@ XarismaBundle\Entity\Import:
             nullable: true
             length: 50
             fixed: false
-            comment: 'Status result of import'
+            comment: 'Status result of operation'
         recs:
             type: integer
             nullable: true
@@ -48,7 +54,7 @@ XarismaBundle\Entity\Import:
             nullable: true
             length: 5
             default: 0
-            comment: 'Number of errors during import'
+            comment: 'Number of errors during operation'
         customerNew:
             type: integer
             nullable: true

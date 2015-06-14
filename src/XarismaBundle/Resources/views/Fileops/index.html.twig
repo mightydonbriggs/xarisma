@@ -1,7 +1,7 @@
 {% extends 'XarismaBundle:Default:base.html.twig' %}
 
 {% block body -%}
-    <h1>Import Job History</h1>
+    <h1>Import/Export Job History</h1>
     <hr />
     <table class="records_list table">
         <thead>
@@ -11,11 +11,13 @@
                 <th>&nbsp;</th>
                 <th>&nbsp;</th>
                 <th>&nbsp;</th>
+                <th>&nbsp;</th>
                 <th colspan='2'><center>Customer</center></th>
                 <th colspan='2'><center>Order</center></th>
             </tr>
             <tr>
-                <th>Import&nbsp;Time</th>
+                <th>Action</th>
+                <th>Event&nbsp;Time</th>
                 <th>Filename</th>
                 <th>Result</th>
                 <th>Recs</th>
@@ -28,13 +30,14 @@
         </thead>
         <tbody>
         {% for entity in entities %}
-            {% if entity.importTime %}
-                {% set importTime=entity.importTime|date('M-d H:i') %}
+            {% if entity.eventTime %}
+                {% set eventTime=entity.eventTime|date('M-d H:i') %}
             {% else %}
-                {% set importTime='Unknown' %}
+                {% set eventTime='Unknown' %}
             {% endif %}
             <tr>
-                <td><a href="{{ path('import_show', { 'id': entity.id }) }}">{{ importTime }}</a></td>
+                <td>{{ entity.action }}</td>
+                <td><a href="{{ path('fileops_show', { 'id': entity.id }) }}">{{ eventTime }}</a></td>
                 <td>{{ entity.filename|split('/')|last}}</td>
                 <td>{{ entity.status }}</td>
                 <td>{{ entity.recs }}</td>
@@ -50,8 +53,13 @@
 
     <ul>
         <li>
-            <a href="{{ path('import_new') }}">
-                Create a new entry
+            <a href="{{ path('fileops_new') }}">
+                Import File
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('fileops_new') }}">
+                Export File
             </a>
         </li>
     </ul>

@@ -2,73 +2,77 @@
 
 namespace XarismaBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use XarismaBundle\Controller\BaseController;
-use XarismaBundle\Entity\Import;
+
+use XarismaBundle\Entity\Fileops;
+use XarismaBundle\Form\FileopsType;
+
 use XarismaBundle\Entity\Customer;
 use XarismaBundle\Entity\Custorder;
 
-use XarismaBundle\Form\ImportType;
 
 /**
- * Import controller
+ * Fileops controller.
  *
  */
-class ImportController extends BaseController
+class FileopsController extends BaseController
 {
+    
     protected $importDirPath = "import";    //Relitave name of import directory
     protected $importFile = null;           //Fully-qualified inport path
     protected $md5 = null;                  //MD5 of file contents
-    protected $objImport = null;            //Import entity
+    protected $objFileops = null;            //Import entity    
 
     /**
-     * Lists all Import entities.
+     * Lists all Fileops entities.
      *
      */
     public function indexAction()
     {
-        $entities = $this->getRepo('Import')->getArrayList('');
-//dump($entities);
-//die();
+        $entities = $this->getRepo('Fileops')->getArrayList('');
 
-        return $this->render('XarismaBundle:Import:index.html.twig', array(
+        return $this->render('XarismaBundle:Fileops:index.html.twig', array(
             'entities' => $entities,
-        ));
+        ));    
     }
     
+    
     /**
-     * Creates a new Import entity.
+     * Creates a new Fileops entity.
      *
      */
     public function createAction(Request $request)
     {
-        $entity = new Import();
+        $entity = new Fileops();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $this->getRepo('Import')->persistEntity($entity);
-            $this->getRepo('Import')->flushEntities();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($entity);
+            $em->flush();
 
-            return $this->redirect($this->generateUrl('import_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('fileops_show', array('id' => $entity->getId())));
         }
 
-        return $this->render('XarismaBundle:Import:new.html.twig', array(
+        return $this->render('XarismaBundle:Fileops:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
     }
 
     /**
-     * Creates a form to create a Import entity.
+     * Creates a form to create a Fileops entity.
      *
-     * @param Import $entity The entity
+     * @param Fileops $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Import $entity)
+    private function createCreateForm(Fileops $entity)
     {
-        $form = $this->createForm(new ImportType(), $entity, array(
-            'action' => $this->generateUrl('import_create'),
+        $form = $this->createForm(new FileopsType(), $entity, array(
+            'action' => $this->generateUrl('fileops_create'),
             'method' => 'POST',
         ));
 
@@ -78,27 +82,30 @@ class ImportController extends BaseController
     }
 
     /**
-     * Displays a form to create a new Import entity.
+     * Displays a form to create a new Fileops entity.
      *
      */
-    public function newAction()
+    public function newimportAction()
     {
-        $this->objImport = new Import();
-        $this->objImport->setImportTime(new \DateTime())
+        $this->objFileops = new Fileops();
+        $this->objFileops->setEventTime(new \DateTime())
+                    ->setAction('I')
                     ->setDeleted(0)
                     ->setRecs(0)
                     ->setErrors(0)
                     ->setCustomerNew(0)
                     ->setCustomerUpdate(0)
-                    ->setStatus(Import::$STATUS_IMPORTING);
+                    ->setStatus(Fileops::$STATUS_IMPORTING);
         
+//dump($this);
+//die();
         //--- Find import file
         $result=$this->_getImportFile();
         if($result['status'] === false) {
             throw new Exception($result['data']);
         }
         $this->importFile = $result['data'];
-        $this->objImport->setFilename($this->importFile);
+        $this->objFileops->setFilename($this->importFile);
         
         
         //--- Generate  md5 of file
@@ -107,21 +114,22 @@ class ImportController extends BaseController
             throw new Exception($result['data']);
         }
         $this->md5 = $result['data'];
-        $this->objImport->setMd5($this->md5);
+        $this->objFileops->setMd5($this->md5);
         
         //--- Check md5 against database
-        $md5IsUnique = $this->getRepo('Import')->md5isUnique($this->objImport->getMd5());
+        $md5IsUnique = $this->getRepo('Import')->md5isUnique($this->objFileops->getMd5());
         if($md5IsUnique !== true) {
             //md5 already exists. This file has already been processed
         }
         
         //--- Read file into array
         $result = $this->getRepo('Import')->readFile($this->importFile);
+
         if($result['status'] === false) {
             throw new Exception($result['data']);
         }
         $aryImport = $result['data'];
-        $this->objImport->setRecs(count($aryImport));
+        $this->objFileops->setRecs(count($aryImport));
 //        
 //dump($aryImport);
 //die();
@@ -140,57 +148,62 @@ class ImportController extends BaseController
         }
         
         //--- Save Import record
-        $this->objImport->setStatus(Import::$STATUS_SUCCESS);
-        $this->persistEntity($this->objImport);
+        $this->objFileops->setStatus(Fileops::$STATUS_SUCCESS);
+        $this->persistEntity($this->objFileops);
         $this->flushEntities();
         
         //---Display new import record
-        $deleteForm = $this->createDeleteForm($this->objImport->getId()); //Dummy form to pass to view
+        $deleteForm = $this->createDeleteForm($this->objFileops->getId()); //Dummy form to pass to view
 
-        return $this->render('XarismaBundle:Import:show.html.twig', array(
-            'entity'      => $this->objImport,
+        return $this->render('XarismaBundle:Fileops:show.html.twig', array(
+            'entity'      => $this->objFileops,
             'delete_form' => $deleteForm->createView(),
-        ));
+        ));       
+        
     }
 
     /**
-     * Finds and displays a Import entity.
+     * Finds and displays a Fileops entity.
      *
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $this->getRepo('Import')->find($id);
+        $entity = $em->getRepository('XarismaBundle:Fileops')->find($id);
+//dump($entity);
+//die();
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Import entity.');
+            throw $this->createNotFoundException('Unable to find Fileops entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
-        
-        return $this->render('XarismaBundle:Import:show.html.twig', array(
+
+        return $this->render('XarismaBundle:Fileops:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing Import entity.
+     * Displays a form to edit an existing Fileops entity.
      *
      */
     public function editAction($id)
     {
-        $entity = $this->getRepo('Import')->find($id);
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('XarismaBundle:Fileops')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Import entity.');
+            throw $this->createNotFoundException('Unable to find Fileops entity.');
         }
 
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('XarismaBundle:Import:edit.html.twig', array(
+        return $this->render('XarismaBundle:Fileops:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -198,16 +211,16 @@ class ImportController extends BaseController
     }
 
     /**
-    * Creates a form to edit a Import entity.
+    * Creates a form to edit a Fileops entity.
     *
-    * @param Import $entity The entity
+    * @param Fileops $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(Import $entity)
+    private function createEditForm(Fileops $entity)
     {
-        $form = $this->createForm(new ImportType(), $entity, array(
-            'action' => $this->generateUrl('import_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new FileopsType(), $entity, array(
+            'action' => $this->generateUrl('fileops_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -216,17 +229,17 @@ class ImportController extends BaseController
         return $form;
     }
     /**
-     * Edits an existing Import entity.
+     * Edits an existing Fileops entity.
      *
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $this->getRepo('Import')->find($id);
+        $entity = $em->getRepository('XarismaBundle:Fileops')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Import entity.');
+            throw $this->createNotFoundException('Unable to find Fileops entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -236,17 +249,17 @@ class ImportController extends BaseController
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('import_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('fileops_edit', array('id' => $id)));
         }
 
-        return $this->render('XarismaBundle:Import:edit.html.twig', array(
+        return $this->render('XarismaBundle:Fileops:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
     /**
-     * Deletes a Import entity.
+     * Deletes a Fileops entity.
      *
      */
     public function deleteAction(Request $request, $id)
@@ -256,21 +269,21 @@ class ImportController extends BaseController
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $this->getRepo('Import')->find($id);
+            $entity = $em->getRepository('XarismaBundle:Fileops')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Import entity.');
+                throw $this->createNotFoundException('Unable to find Fileops entity.');
             }
 
             $em->remove($entity);
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('import'));
+        return $this->redirect($this->generateUrl('fileops'));
     }
 
-    /**disrespecfuldisrespecful
-     * Creates a form to delete a Import entity by id.
+    /**
+     * Creates a form to delete a Fileops entity by id.
      *
      * @param mixed $id The entity id
      *
@@ -279,13 +292,13 @@ class ImportController extends BaseController
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('import_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('fileops_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
     }
-
+    
     private function _getImportFile()
     {
         $basePath = $this->get('kernel')->getRootDir();
@@ -315,44 +328,7 @@ class ImportController extends BaseController
                      'data'   => $md5
                     );
     }
-    
-    
-    
-    private function _importCustomers($aryImport) {
-        
-        $numRecs = count($aryImport);
-        $aryProcessed = array();
-        $newCust = 0;
-        $updateCust = 0;
-        
-        for($i=0; $i<$numRecs; $i++) {
-            $customerNum = $aryImport[$i]['customernumber'];
-            
-            if(in_array($customerNum, $aryProcessed)) {
-                continue;
-            }
-            $aryProcessed[] = $customerNum;
-            $customer = $this->getRepo('Customer')->findByCustomerNum($customerNum);
-            if(!$customer) {
-                //This is a new customer record
-                $newCust++;
-                $customer = new Customer();
-                $customer->setDeleted(0);
-                $customer->setCustomernumber($customerNum);
-                $customer->setAccountname($aryImport[$i]['accountname']);
-                $customer->setDatecreated(new \DateTime());
-                $this->persistEntity($customer);
-            } else {
-                //This is an existing customer record
-                //@TODO Do something with updated customer records
-            }
-        }
-        $this->flushEntities();
-        $this->objImport->setCustomerNew($newCust);
-        return null;
-    }
-    
-    
+ 
     private function _importOrders($aryImport) {
         $numRecs   = count($aryImport);
         $newOrd    = 0;
@@ -386,8 +362,42 @@ class ImportController extends BaseController
             }
         }
         $this->flushEntities();
-        $this->objImport->setOrderNew($newOrd);
+        $this->objFileops->setOrderNew($newOrd);
+        return null;
+    }    
+  
+        
+    private function _importCustomers($aryImport) {
+        
+        $numRecs = count($aryImport);
+        $aryProcessed = array();
+        $newCust = 0;
+        $updateCust = 0;
+        
+        for($i=0; $i<$numRecs; $i++) {
+            $customerNum = $aryImport[$i]['customernumber'];
+            
+            if(in_array($customerNum, $aryProcessed)) {
+                continue;
+            }
+            $aryProcessed[] = $customerNum;
+            $customer = $this->getRepo('Customer')->findByCustomerNum($customerNum);
+            if(!$customer) {
+                //This is a new customer record
+                $newCust++;
+                $customer = new Customer();
+                $customer->setDeleted(0);
+                $customer->setCustomernumber($customerNum);
+                $customer->setAccountname($aryImport[$i]['accountname']);
+                $customer->setDatecreated(new \DateTime());
+                $this->persistEntity($customer);
+            } else {
+                //This is an existing customer record
+                //@TODO Do something with updated customer records
+            }
+        }
+        $this->flushEntities();
+        $this->objFileops->setCustomerNew($newCust);
         return null;
     }
-    
 }

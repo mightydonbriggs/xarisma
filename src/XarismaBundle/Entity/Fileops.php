@@ -5,11 +5,10 @@ namespace XarismaBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Import
+ * Fileops
  */
-class Import
+class Fileops
 {
-    
     public static $STATUS_IMPORTING = "IMPORTING";
     public static $STATUS_SUCCESS   = "SUCCESS";
     public static $STATUS_ERROR = "ERROR";
@@ -20,9 +19,14 @@ class Import
     private $id;
 
     /**
+     * @var string
+     */
+    private $action;
+
+    /**
      * @var \DateTime
      */
-    private $importTime;
+    private $eventTime;
 
     /**
      * @var string
@@ -96,33 +100,56 @@ class Import
     }
 
     /**
-     * Set importTime
+     * Set action
      *
-     * @param \DateTime $importTime
-     * @return Import
+     * @param string $action
+     * @return Fileops
      */
-    public function setImportTime($importTime)
+    public function setAction($action)
     {
-        $this->importTime = $importTime;
+        $this->action = $action;
 
         return $this;
     }
 
     /**
-     * Get importTime
+     * Get action
+     *
+     * @return string 
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    /**
+     * Set eventTime
+     *
+     * @param \DateTime $eventTime
+     * @return Fileops
+     */
+    public function setEventTime($eventTime)
+    {
+        $this->eventTime = $eventTime;
+
+        return $this;
+    }
+
+    /**
+     * Get eventTime
      *
      * @return \DateTime 
      */
-    public function getImportTime()
+    public function getEventTime()
     {
-        return $this->importTime;
+        return $this->eventTime;
     }
 
     /**
      * Set filename
      *
      * @param string $filename
-     * @return Import
+     * @return Fileops
      */
     public function setFilename($filename)
     {
@@ -145,7 +172,7 @@ class Import
      * Set md5
      *
      * @param string $md5
-     * @return Import
+     * @return Fileops
      */
     public function setMd5($md5)
     {
@@ -168,7 +195,7 @@ class Import
      * Set status
      *
      * @param string $status
-     * @return Import
+     * @return Fileops
      */
     public function setStatus($status)
     {
@@ -191,7 +218,7 @@ class Import
      * Set recs
      *
      * @param integer $recs
-     * @return Import
+     * @return Fileops
      */
     public function setRecs($recs)
     {
@@ -214,7 +241,7 @@ class Import
      * Set errors
      *
      * @param integer $errors
-     * @return Import
+     * @return Fileops
      */
     public function setErrors($errors)
     {
@@ -237,7 +264,7 @@ class Import
      * Set customerNew
      *
      * @param integer $customerNew
-     * @return Import
+     * @return Fileops
      */
     public function setCustomerNew($customerNew)
     {
@@ -260,7 +287,7 @@ class Import
      * Set customerUpdate
      *
      * @param integer $customerUpdate
-     * @return Import
+     * @return Fileops
      */
     public function setCustomerUpdate($customerUpdate)
     {
@@ -283,7 +310,7 @@ class Import
      * Set orderNew
      *
      * @param integer $orderNew
-     * @return Import
+     * @return Fileops
      */
     public function setOrderNew($orderNew)
     {
@@ -306,7 +333,7 @@ class Import
      * Set orderUpdate
      *
      * @param integer $orderUpdate
-     * @return Import
+     * @return Fileops
      */
     public function setOrderUpdate($orderUpdate)
     {
@@ -329,7 +356,7 @@ class Import
      * Set datecreated
      *
      * @param \DateTime $datecreated
-     * @return Import
+     * @return Fileops
      */
     public function setDatecreated($datecreated)
     {
@@ -352,7 +379,7 @@ class Import
      * Set dateupdated
      *
      * @param \DateTime $dateupdated
-     * @return Import
+     * @return Fileops
      */
     public function setDateupdated($dateupdated)
     {
@@ -375,7 +402,7 @@ class Import
      * Set deleted
      *
      * @param integer $deleted
-     * @return Import
+     * @return Fileops
      */
     public function setDeleted($deleted)
     {

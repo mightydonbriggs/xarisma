@@ -1,17 +1,32 @@
 {% extends 'XarismaBundle:Default:base.html.twig' %}
 
 {% block body -%}
-    <h1>Import Job Details</h1>
-    <br />
+    
+    {% if entity.action == 'I' %}
+    {%   set eventType = 'Import' %}
+    {% else %}
+    {%   set eventType = 'Export' %}
+    {% endif %}
+        
+    <h1>File Opeerations Job Details</h1>
+    
+    <ul class="record_actions">
+    <li>
+        <a href="{{ path('fileops') }}">
+            Back to the list
+        </a>
+    </li>
+    </ul>
+            
     <table class="record_properties">
         <tbody>
             <tr>
-                <th>Import Time</th>
-                <th>{{ entity.importTime|date('Y-m-d H:i:s') }}</th>
+                <th>Event Type</th>
+                <th>{{ eventType }}</th>
             </tr>
             <tr>
-                <th>Filename</th>
-                <td>{{ entity.filename }}</td>
+                <th>Event Time</th>
+                <td>{{ entity.eventTime|date('Y-m-d H:i:s') }}</td>
             </tr>
             <tr>
                 <th>Status</th>
@@ -20,6 +35,11 @@
             <tr>
                 <th>Id</th>
                 <td>{{ entity.id }}</td>
+            </tr>
+            <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+            <tr>
+                <th>Filename</th>
+                <td>{{ entity.filename }}</td>
             </tr>
             <tr>
                 <th>Md5</th>
@@ -49,6 +69,7 @@
                 <th>Orderupdate</th>
                 <td>{{ entity.orderUpdate }}</td>
             </tr>
+            <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
             <tr>
                 <th>Datecreated</th>
                 <td>{{ entity.datecreated|date('Y-m-d H:i:s') }}</td>
@@ -62,7 +83,7 @@
 
 <ul class="record_actions">
     <li>
-        <a href="{{ path('import') }}">
+        <a href="{{ path('fileops') }}">
             Back to the list
         </a>
     </li>
