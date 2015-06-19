@@ -6,9 +6,13 @@ fileops_show:
     path:     /{id}/show
     defaults: { _controller: "XarismaBundle:Fileops:show" }
 
-fileops_new:
+fileops_newimport:
     path:     /newimport
     defaults: { _controller: "XarismaBundle:Fileops:newimport" }
+
+fileops_newexport:
+    path:     /newexport
+    defaults: { _controller: "XarismaBundle:Fileops:newexport" }
 
 fileops_create:
     path:     /create
