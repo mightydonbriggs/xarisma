@@ -3,6 +3,8 @@
 --
 -- Don Briggs <donbriggs@donbriggs.com>    2015-06-15
 
+use xarisma;
+
 delete from xarisma.fileops where true;
 delete from xarisma.custorder where true;
 delete from xarisma.customer where true;
