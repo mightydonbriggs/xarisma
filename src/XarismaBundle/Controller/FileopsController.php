@@ -97,8 +97,6 @@ class FileopsController extends BaseController
                     ->setCustomerUpdate(0)
                     ->setStatus(Fileops::$STATUS_IMPORTING);
         
-//dump($this);
-//die();
         //--- Find import file
         $result=$this->_getImportFile();
         if($result['status'] === false) {
@@ -106,7 +104,6 @@ class FileopsController extends BaseController
         }
         $this->importFile = $result['data'];
         $this->objFileops->setFilename($this->importFile);
-        
         
         //--- Generate  md5 of file
         $result = $this->_getMd5();
@@ -117,20 +114,23 @@ class FileopsController extends BaseController
         $this->objFileops->setMd5($this->md5);
         
         //--- Check md5 against database
-        $md5IsUnique = $this->getRepo('Import')->md5isUnique($this->objFileops->getMd5());
+        $md5IsUnique = $this->getRepo('Fileops')->md5isUnique($this->objFileops->getMd5());
         if($md5IsUnique !== true) {
             //md5 already exists. This file has already been processed
         }
         
+//dump($this);
+//die();
+        
         //--- Read file into array
-        $result = $this->getRepo('Import')->readFile($this->importFile);
+        $result = $this->getRepo('Fileops')->readFile($this->importFile);
 
         if($result['status'] === false) {
             throw new Exception($result['data']);
         }
         $aryImport = $result['data'];
         $this->objFileops->setRecs(count($aryImport));
-//        
+        
 //dump($aryImport);
 //die();
         
