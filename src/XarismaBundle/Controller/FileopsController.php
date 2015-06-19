@@ -18,7 +18,7 @@ use XarismaBundle\Entity\Custorder;
  */
 class FileopsController extends BaseController
 {
-    
+
     protected $importDirPath = "import";    //Relitave name of import directory
     protected $importFile = null;           //Fully-qualified inport path
     protected $md5 = null;                  //MD5 of file contents
@@ -86,7 +86,7 @@ class FileopsController extends BaseController
      *
      */
     public function newimportAction()
-    {
+    {     
         $this->objFileops = new Fileops();
         $this->objFileops->setEventTime(new \DateTime())
                     ->setAction('I')
