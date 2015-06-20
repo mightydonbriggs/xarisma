@@ -15,7 +15,7 @@ class Custorder
     public static $STATUS_HOLD_OTHER    = "HOLD_OTHER";
     public static $STATUS_PRODUCTION    = "PRODUCTION";
     public static $STATUS_SHIP_READY    = "SHIP_READY";
-    public static $STATUS_SHIPED        = "SHIPED";
+    public static $STATUS_SHIPPED       = "SHIPPED";
     
     /**
      * @var integer
@@ -62,6 +62,15 @@ class Custorder
      */
     private $deleted;
 
+    public function doPrePersist() {
+        $this->setDatecreated();
+    }
+    
+    public function doPreUpdate() {
+        if(is_null($this->getDateexported()) || $this->getDateupdated() > $this->dateexported) {
+            $this->setNeedsexport(true);
+        }
+    }
     
     /**
      * Get id
@@ -194,9 +203,10 @@ class Custorder
      * @param \DateTime $datecreated
      * @return Custorder
      */
-    public function setDatecreated($datecreated)
+    public function setDatecreated()
     {
-        $this->datecreated = $datecreated;
+//        $this->datecreated = $datecreated;
+        $this->datecreated = new \DateTime();
 
         return $this;
     }
@@ -219,8 +229,8 @@ class Custorder
      */
     public function setDateupdated($dateupdated)
     {
-        $this->dateupdated = $dateupdated;
-
+//        $this->dateupdated = $dateupdated;
+        $this->dateupdated = new \DateTime();
         return $this;
     }
 
@@ -311,5 +321,61 @@ class Custorder
     public function getOrderdate()
     {
         return $this->orderdate;
+    }
+    /**
+     * @var integer
+     */
+    private $needsexport;
+
+    /**
+     * @var \DateTime
+     */
+    private $dateexported;
+
+
+    /**
+     * Set needsexport
+     *
+     * @param integer $needsexport
+     * @return Custorder
+     */
+    public function setNeedsexport($needsexport)
+    {
+        $this->needsexport = $needsexport;
+
+        return $this;
+    }
+
+    /**
+     * Get needsexport
+     *
+     * @return integer 
+     */
+    public function getNeedsexport()
+    {
+        return $this->needsexport;
+    }
+
+    /**
+     * Set dateexported
+     *
+     * @param \DateTime $dateexported
+     * @return Custorder
+     */
+    public function setDateexported($dateexported)
+    {
+        $this->dateexported = $dateexported;
+
+        return $this;
+    }
+
+    /**
+     * Get dateexported
+     *
+     * @return \DateTime 
+     */
+    public function getDateexported()
+    {
+        return $this->dateexported;
     }
 }

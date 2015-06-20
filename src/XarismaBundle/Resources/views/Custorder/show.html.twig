@@ -22,6 +22,15 @@
                 <td>{{ entity.customer.accountname }}</td>
             </tr>
             <tr>
+                <th>Order Date</th>
+                {% if entity.orderdate.timestamp is defined %}
+                    <td>{{ entity.orderdate|date('Y-m-d') }}</td>
+                {% else %}
+                    <td>Null</td>  
+                {% endif %}
+            </tr>            
+            
+            <tr>
                 <th>Status</th>
                 <td>{{ entity.orderstatus }}</td>
             </tr>
@@ -29,16 +38,31 @@
                 <th>&nbsp;</th>
                 <td>&nbsp;</td>
             </tr>
+            
             <tr>
                 <th>Created</th>
-                <td>{{ entity.datecreated|date('Y-m-d H:i:s') }}</td>
-            </tr>
-                <th>Updated</th>
-                <td>{{ entity.dateupdated|date('Y-m-d H:i:s') }}</td>
+                {% if entity.datecreated.timestamp is defined %}
+                    <td>{{ entity.datecreated|date('Y-m-d H:i:s') }}</td>
+                {% else %}
+                    <td>Null</td>  
+                {% endif %}
             </tr>
             <tr>
+                <th>Updated</th>
+                {% if entity.dateupdated.timestamp is defined %}
+                    <td>{{ entity.dateupdated|date('Y-m-d H:i:s') }}</td>
+                {% else %}
+                    <td>Null</td>  
+                {% endif %}
+            </tr>
+            
+            <tr>
                 <th>Update By</th>
-                <td>{{ entity.updateby }}</td>
+                {% if entity.updateby is not null %}
+                    <td>{{ entity.updateby }}</td>
+                {% else %}    
+                    <td>Null</td>
+                {% endif %}    
             </tr>
         </tbody>
     </table>
@@ -63,7 +87,7 @@
 
 {% block pagecss %}
 <style>
- table.table_details { background-color: #cfcfcf; padding: 7px; }
+ table.table_details { background-color: #cfcfcf; padding: 7px;}
  table.table_details >tbody > tr > th { padding-right: 10px; }
  div.notes_div {margin-top: 15px;}
  .textarea_notes

@@ -43,7 +43,11 @@
             </tr>
             <tr>
                 <th>Md5</th>
-                <td>{{ entity.md5 }}</td>
+                {% if entity.md5 is not null %}
+                    <td>{{ entity.md5 }}</td>
+                {% else %}    
+                    <td>Null</td>
+                {% endif %}    
             </tr>
             <tr>
                 <th>Recs</th>
@@ -70,14 +74,24 @@
                 <td>{{ entity.orderUpdate }}</td>
             </tr>
             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+            
             <tr>
-                <th>Datecreated</th>
-                <td>{{ entity.datecreated|date('Y-m-d H:i:s') }}</td>
+                <th>Created</th>
+                {% if entity.datecreated.timestamp is defined %}
+                    <td>{{ entity.datecreated|date('Y-m-d H:i:s') }}</td>
+                {% else %}
+                    <td>Null</td>  
+                {% endif %}
             </tr>
             <tr>
-                <th>Dateupdated</th>
-                <td>{{ entity.dateupdated|date('Y-m-d H:i:s') }}</td>
+                <th>Updated</th>
+                {% if entity.dateupdated.timestamp is defined %}
+                    <td>{{ entity.dateupdated|date('Y-m-d H:i:s') }}</td>
+                {% else %}
+                    <td>Null</td>  
+                {% endif %}
             </tr>
+            
         </tbody>
     </table>
 

@@ -12,6 +12,8 @@ class Fileops
     public static $STATUS_IMPORTING = "IMPORTING";
     public static $STATUS_SUCCESS   = "SUCCESS";
     public static $STATUS_ERROR = "ERROR";
+    public static $STATUS_EXPORTING = "EXPORTING";
+    public static $STATUS_NORECS = "NO_RECS_TO_EXPORT";
     
     /**
      * @var integer

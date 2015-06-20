@@ -21,14 +21,24 @@
                 <th>Notes</th>
                 <td>{{ entity.notes }}</td>
             </tr>
+            
             <tr>
-                <th>Datecreated</th>
-                <td>{{ entity.datecreated|date('Y-m-d H:i:s') }}</td>
+                <th>Created</th>
+                {% if entity.datecreated.timestamp is defined %}
+                    <td>{{ entity.datecreated|date('Y-m-d H:i:s') }}</td>
+                {% else %}
+                    <td>Null</td>  
+                {% endif %}
             </tr>
             <tr>
-                <th>Dateupdated</th>
-                <td>{{ entity.dateupdated|date('Y-m-d H:i:s') }}</td>
+                <th>Updated</th>
+                {% if entity.dateupdated.timestamp is defined %}
+                    <td>{{ entity.dateupdated|date('Y-m-d H:i:s') }}</td>
+                {% else %}
+                    <td>Null</td>  
+                {% endif %}
             </tr>
+            
             <tr>
                 <th>Deleted</th>
                 <td>{{ entity.deleted }}</td>

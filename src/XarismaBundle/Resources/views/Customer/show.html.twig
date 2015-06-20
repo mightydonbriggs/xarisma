@@ -31,14 +31,24 @@
                 <td>{% if entity.repname%}{{ entity.repname }}{% else%}N/A{% endif %}</td>
             </tr>
             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+            
             <tr>
                 <th>Created</th>
-                <td>{{ entity.datecreated|date('Y-m-d H:i:s') }}</td>
+                {% if entity.datecreated.timestamp is defined %}
+                    <td>{{ entity.datecreated|date('Y-m-d H:i:s') }}</td>
+                {% else %}
+                    <td>Null</td>  
+                {% endif %}
             </tr>
             <tr>
                 <th>Updated</th>
-                <td>{{ entity.dateupdated|date('Y-m-d H:i:s') }}</td>
+                {% if entity.dateupdated.timestamp is defined %}
+                    <td>{{ entity.dateupdated|date('Y-m-d H:i:s') }}</td>
+                {% else %}
+                    <td>Null</td>  
+                {% endif %}
             </tr>
+            
         </tbody>
     </table>
 

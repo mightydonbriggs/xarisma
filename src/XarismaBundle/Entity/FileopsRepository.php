@@ -2,6 +2,7 @@
 namespace XarismaBundle\Entity;
 
 use XarismaBundle\Entity\BaseRepository;
+use \Doctrine\DBAL\DriverManager;
 
 /**
  * Repository for Import Object.
@@ -31,6 +32,7 @@ class FileopsRepository extends BaseRepository
             return false; //md5 is NOT unique
         }
     }
+    
     
     /**
      * Read Import csv file
@@ -82,6 +84,75 @@ class FileopsRepository extends BaseRepository
                     );
     }
 
+    
+    
+    public function getExportArray() {
+         $em = $this->getEntityManager();
+         $dql = 'SELECT co.orderdate, co.ordernumber, '
+              . "concat(cu.customernumber,  ' ', cu.accountname) customer, "
+              . 'co.orderstatus, cu.customernumber '
+              . 'FROM XarismaBundle:Custorder co '
+              . 'JOIN co.customer cu '
+              . 'WHERE co.deleted = 0 AND co.needsexport != 0';
+         if(!$query = $em->createQuery($dql)) {
+             return array('status' => false,
+                          'data'   => 'ERROR: Could not build export array');
+         }
+         $rows = $query->getArrayResult();
 
+         $result = array('status' => true,
+                         'data'   => $rows);
+         return $result;
+    }
+    
+    
+    public function writeFile(array $aryExport, $filepath) {
         
+        $exportDir = dirname($filepath);
+        $numRecs = count($aryExport);
+        $headerLine = "Date,Number,Name,Order Production Status" .PHP_EOL;
+        $custUpdate = 0;
+        $orderUpdate = 0;
+        $custProcessed = array();
+        $orderProcessed = array();
+        
+        if(realpath($exportDir) === null) {
+            return array('status ' => false,
+                         'data'    => 'ERROR: Could not find export dir: ' .$exportDir);
+        } elseif (!is_writable($exportDir)) {
+            return array('status ' => false,
+                         'data'    => 'ERROR: Could not write to export dir: ' .$exportDir);
+        } elseif ($numRecs === 0) {
+            return array('status ' => false,
+                         'data'    => 'ERROR: Export array contains no data');
+        }
+        
+        $handle = fopen($filepath, 'w');
+        fwrite($handle, $headerLine, 1000);
+        for($i=0; $i<$numRecs; $i++) {
+            $aryExport[$i]['orderdate'] = $aryExport[$i]['orderdate']->format('m/d/Y');
+            $thisRec = $aryExport[$i];
+            $customernumber = $thisRec['customernumber'];
+            unset($thisRec['customernumber']);
+            $thisLine = implode(',', $aryExport[$i]);
+            if(!in_array($customernumber, $custProcessed)) {
+                //This is a new customer number
+                $custProcessed[] = $customernumber;
+                $custUpdate++;
+            }
+            if(!in_array($thisRec['ordernumber'], $orderProcessed)) {
+                //This is a new order
+                $orderProcessed[] = $thisRec['ordernumber'];
+                $orderUpdate++;
+            }
+            fwrite($handle, $thisLine .PHP_EOL);
+        }
+        fclose($handle);
+        
+        $data = array('custUpdate' => $custUpdate,
+                      'orderUpdate' => $orderUpdate);
+        $result = array('status' => true,
+                        'data'   => $data);
+        return $result;
+    }
 }

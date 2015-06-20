@@ -16,6 +16,10 @@ XarismaBundle\Entity\Custorder:
             id: true
             generator:
                 strategy: IDENTITY
+    lifecycleCallbacks:
+        prePersist: [ doPrePersist ]
+        preUpdate: [ doPreUpdate ]                
+                
     fields:
         ordernumber:
             type: string
@@ -47,15 +51,27 @@ XarismaBundle\Entity\Custorder:
             unsigned: false
             comment: ''
             column: updateBy
+            
+        needsexport:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Flag indicating that records updated and needs export'
+            column: needsExport
+        dateexported:
+            type: datetime
+            nullable: true
+            comment: 'Date and time this record was last exported'
+            column: dateExported
         datecreated:
             type: datetime
             nullable: true
-            comment: ''
+            comment: 'Date and time this record was created'
             column: dateCreated
         dateupdated:
             type: datetime
             nullable: true
-            comment: ''
+            comment: 'Date and time this record was last updated'
             column: dateUpdated
         deleted:
             type: integer
@@ -73,4 +89,3 @@ XarismaBundle\Entity\Custorder:
                 customer_id:
                     referencedColumnName: id
             orphanRemoval: false
-    lifecycleCallbacks: {  }
