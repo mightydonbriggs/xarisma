@@ -35,6 +35,22 @@
                 <td>{{ entity.orderstatus }}</td>
             </tr>
             <tr>
+                <th>Date Exported</th>
+                {% if entity.dateexported.timestamp is defined %}
+                    <td>{{ entity.dateexported|date('Y-m-d H:i:s') }}</td>
+                {% else %}
+                    <td>Null</td>  
+                {% endif %}
+            </tr>
+            <tr>
+                <th>Needs Export</th>
+                {% if entity.needsexport %}
+                  <td>Yes</td>
+                {% else %}
+                    <td>No</td>
+                {% endif %}
+            </tr>
+            <tr>
                 <th>&nbsp;</th>
                 <td>&nbsp;</td>
             </tr>

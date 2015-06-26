@@ -21,7 +21,7 @@ class CustorderRepository extends BaseRepository
         
         $em = $this->getEntityManager();
         
-        $dql = 'SELECT co.id, co.ordernumber, co.orderdate, co.orderstatus, cu.accountname customername, cu.repname '
+        $dql = 'SELECT co.id, co.ordernumber, co.orderdate, co.orderstatus, cu.accountname customername, co.needsexport '
              . 'FROM XarismaBundle:Custorder co '
              . 'LEFT JOIN co.customer cu';
         

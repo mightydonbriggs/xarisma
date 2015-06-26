@@ -92,6 +92,8 @@ class CustorderController extends BaseController
     {
         $entity = $this->getRepo('Custorder')->find($id);
         $entity->getCustomer()->getAccountname();
+//dump($entity);
+//die();
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Custorder entity.');

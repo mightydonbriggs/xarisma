@@ -10,18 +10,34 @@
                 <th>Customer</th>
                 <th>Order Date</th>
                 <th>Status</th>
+                <th>Needs Exp</th>
             </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
-            <tr>
+            {% if entity.needsexport %}
+                <tr class="needsexport">
+            {% else %}
+                <tr>
+            {% endif %}
                 <td><a href="{{ path('custorder_show', { 'id': entity.id }) }}">{{ entity.ordernumber }}</a></td>
                 <td>{{ entity.customername }}</td>
                 <td>{{ entity.orderdate|date('Y-m-d') }}</td>
                 <td>{{ entity.orderstatus }}</td>
+                {% if entity.needsexport %}
+                    <td>Yes</td>
+                {% else %}
+                    <td>No</td>
+                {% endif %}    
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
     {% endblock %}
+
+{% block pagecss %}
+<style>
+    tr.needsexport { background-color: #f7ffb4; }
+</style>
+{% endblock %}

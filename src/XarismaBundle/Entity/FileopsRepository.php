@@ -88,12 +88,11 @@ class FileopsRepository extends BaseRepository
     
     public function getExportArray() {
          $em = $this->getEntityManager();
-         $dql = 'SELECT co.orderdate, co.ordernumber, '
-              . "concat(cu.customernumber,  ' ', cu.accountname) customer, "
-              . 'co.orderstatus, cu.customernumber '
+         
+         $dql = 'SELECT co.ordernumber, co.orderstatus '
               . 'FROM XarismaBundle:Custorder co '
-              . 'JOIN co.customer cu '
               . 'WHERE co.deleted = 0 AND co.needsexport != 0';
+         
          if(!$query = $em->createQuery($dql)) {
              return array('status' => false,
                           'data'   => 'ERROR: Could not build export array');
@@ -110,7 +109,7 @@ class FileopsRepository extends BaseRepository
         
         $exportDir = dirname($filepath);
         $numRecs = count($aryExport);
-        $headerLine = "Date,Number,Name,Order Production Status" .PHP_EOL;
+        $headerLine = "Number,Status" .PHP_EOL;
         $custUpdate = 0;
         $orderUpdate = 0;
         $custProcessed = array();
@@ -130,16 +129,9 @@ class FileopsRepository extends BaseRepository
         $handle = fopen($filepath, 'w');
         fwrite($handle, $headerLine, 1000);
         for($i=0; $i<$numRecs; $i++) {
-            $aryExport[$i]['orderdate'] = $aryExport[$i]['orderdate']->format('m/d/Y');
             $thisRec = $aryExport[$i];
-            $customernumber = $thisRec['customernumber'];
-            unset($thisRec['customernumber']);
             $thisLine = implode(',', $aryExport[$i]);
-            if(!in_array($customernumber, $custProcessed)) {
-                //This is a new customer number
-                $custProcessed[] = $customernumber;
-                $custUpdate++;
-            }
+
             if(!in_array($thisRec['ordernumber'], $orderProcessed)) {
                 //This is a new order
                 $orderProcessed[] = $thisRec['ordernumber'];
