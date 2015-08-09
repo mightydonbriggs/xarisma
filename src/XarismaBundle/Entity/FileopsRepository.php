@@ -62,7 +62,7 @@ class FileopsRepository extends BaseRepository
         $aryImport = array();
         
         while (($aryLine = fgetcsv($handle, 1000, ",")) !== FALSE) {
-//            dump($aryLine);
+//dump($aryLine);
             if($firstLine) {
                 //Skip first line, as it is the title line
                 $firstLine = false;
@@ -74,7 +74,7 @@ class FileopsRepository extends BaseRepository
             $word = strpos($customer, ' ');
             $aryImport[$row]['customernumber']  = trim(substr($customer, 0, $word));
             $aryImport[$row]['accountname']  = trim(substr($customer, $word, strlen($customer)));
-            $aryImport[$row]['status']  = trim($aryLine[3]);
+//            $aryImport[$row]['status']  = trim($aryLine[3]);
             $row++;
         }
 

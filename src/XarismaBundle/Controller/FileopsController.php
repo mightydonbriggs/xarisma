@@ -4,6 +4,7 @@ namespace XarismaBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use XarismaBundle\Controller\BaseController;
+use XarismaBundle\ProgramConfig;
 
 use XarismaBundle\Entity\Fileops;
 use XarismaBundle\Form\FileopsType;
@@ -19,10 +20,9 @@ use XarismaBundle\Entity\Custorder;
 class FileopsController extends BaseController
 {
 
-    protected $importDirPath = "import";    //Relitave name of import directory
     protected $fileName = null;           //Fully-qualified inport path
     protected $md5 = null;                  //MD5 of file contents
-    protected $objFileops = null;            //Import entity    
+    protected $objFileops = null;            //Import entity
 
     /**
      * Lists all Fileops entities.
@@ -31,13 +31,24 @@ class FileopsController extends BaseController
     public function indexAction()
     {
         $entities = $this->getRepo('Fileops')->getArrayList('');
+        
+        $importDir = ProgramConfig::getImportDir();
+        $exportDir = ProgramConfig::getExportDir();
+        
+        if(! is_writable($importDir)) {
+              $this->addError("ERROR: Import directory not writeable: " .$importDir);
+        }
 
+        if(!is_writable($exportDir)) {
+              $this->addError("ERROR: Export directory not writeable: " .$exportDir);
+        }
+        
         return $this->render('XarismaBundle:Fileops:index.html.twig', array(
             'entities' => $entities,
-        ));    
+        ));
     }
-    
-    
+
+
     /**
      * Creates a new Fileops entity.
      *
@@ -87,22 +98,52 @@ class FileopsController extends BaseController
      * This function will import all files in the import directory that have not yet been imported.
      */
     public function newimportAction()
-    {     
-        //--- Get list of files to import
-        $result=$this->_getImportFile();
-        if($result['status'] === false) {
-            throw new Exception($result['data']);
-        }
-        $aryImportFiles = $result['data'];
+    {
+        $importDir = ProgramConfig::getImportDir();
         
-        //--- Loop through list and process impoprt file
-        $numFiles = count($aryImportFiles);
-        for($i=0; $i<$numFiles; $i++) {
-            $importFile = $aryImportFiles[$i];
-            $this->_processImportFile($importFile);
-            $result = rename($importFile, $importFile.'.done');
+        if(! is_writable($importDir)) {
+            //Crap out and return to list if import directory not writeable
+            $this->addError("ERROR: Import directory not writeable.");
+            
+        } else {
+            //--- Get list of all .csv files in import directory
+            $result = $this->_getImportFiles($importDir);
+            if($result['status'] === false) {
+                throw new Exception($result['data']);
+            }
+            $aryImportFiles = $result['data'];
+
+            //--- Loop through list and process each impoprt file
+            $numFiles = count($aryImportFiles);
+            for($i=0; $i<$numFiles; $i++) {
+                $importFile = $aryImportFiles[$i];
+
+                //Get md5 of this file.
+                $result = $this->_getMd5($importFile);
+                //@TODO Add code to handle md5 failure
+                $this->md5 = $result['data'];
+
+                //--- Check md5 against database, continue if file already imported
+                $md5IsUnique = $this->getRepo('Fileops')->md5isUnique($this->md5);
+                if($md5IsUnique !== true) {
+                    //md5 already exists. This file has already been processed
+                    $this->addNotice("File already imported: " .$importFile);
+                    continue;
+                }
+
+                $this->_processImportFile($importFile);
+                if(! is_writable(dirname($importFile))) {
+                    $this->addError("Directory not writeable: " .dirname($importFile));
+                }
+                elseif(! is_writable($importFile)) {
+                    $this->addNotice("File not writeable: " .$importFile);
+                } else {
+                    $result = rename($importFile, $importFile.'.done');
+                }
+            }
+            
         }
-        
+
         //--- When done with imports, go back to list view
         $entities = $this->getRepo('Fileops')->getArrayList('');
 
@@ -110,7 +151,7 @@ class FileopsController extends BaseController
             'entities' => $entities,
         ));
     }
-        
+
     public function newexportAction()
     {
         //--- Create Fileops Object
@@ -125,7 +166,7 @@ class FileopsController extends BaseController
                     ->setOrderNew(0)
                     ->setOrderUpdate(0)
                     ->setStatus(Fileops::$STATUS_EXPORTING);
-        
+
         //--- Get export filename
         $result = $this->_getExportFilePath();
         if($result['status'] === false) {
@@ -133,7 +174,7 @@ class FileopsController extends BaseController
         }
         $this->fileName = $result['data'];
         $objFileops->setFilename($this->fileName);
-                
+
         //--- Create Export Array
         $result = $this->getrepo('fileops')->getExportArray();
         if($result['status'] === false) {
@@ -149,14 +190,14 @@ class FileopsController extends BaseController
                              ->setFilename('Null');
             $this->persistEntity($objFileops);
             $this->flushEntities();
-            
+
             $deleteForm = $this->createDeleteForm($objFileops->getId()); //Dummy form to pass to view
-            return $this->render('XarismaBundle:Fileops:show.html.twig', 
+            return $this->render('XarismaBundle:Fileops:show.html.twig',
                                  array('entity'      => $objFileops,
                                        'delete_form' => $deleteForm->createView(),
-                                        )); 
+                                        ));
         }
-        
+
         $objFileops->setRecs(count($aryExport));
 
         //--- Write Export File
@@ -169,8 +210,8 @@ class FileopsController extends BaseController
                    ->setOrderUpdate($result['data']['orderUpdate'])
                    ->setOrderNew(0)
                    ->setCustomerNew(0);
-        
-        
+
+
         //--- Generate md5 of this file for later identification
         $result = $this->_getMd5($this->fileName);
         if($result['status'] === false) {
@@ -178,11 +219,11 @@ class FileopsController extends BaseController
         }
         $this->md5 = $result['data'];
         $objFileops->setMd5($this->md5);
-        
+
         //--- Save Fileops Object
         $this->persistEntity($objFileops);
         $this->flushEntities();
-        
+
         //--- Reset export flag for exported records
         $this->resetExportFlag($aryExport);
 
@@ -192,9 +233,9 @@ class FileopsController extends BaseController
         return $this->render('XarismaBundle:Fileops:show.html.twig', array(
             'entity'      => $objFileops,
             'delete_form' => $deleteForm->createView(),
-        ));         
+        ));
     }
-    
+
     /**
      * Finds and displays a Fileops entity.
      *
@@ -245,10 +286,10 @@ class FileopsController extends BaseController
 
     /**
      * Process single import file
-     * 
+     *
      * This function import the data from a single import file. It is called
-     * repeatedly by 
-     * 
+     * repeatedly by
+     *
      * @param type $fileFullPath Array containing full paths to files for import
      * @return type
      * @throws Exception
@@ -274,11 +315,12 @@ class FileopsController extends BaseController
         $this->md5 = $result['data'];
         $objFileops->setMd5($this->md5);
 
-        //--- Check md5 against database
-        $md5IsUnique = $this->getRepo('Fileops')->md5isUnique($objFileops->getMd5());
-        if($md5IsUnique !== true) {
-            //md5 already exists. This file has already been processed
-        }
+//        //--- Check md5 against database, continue if file already imported
+//        $md5IsUnique = $this->getRepo('Fileops')->md5isUnique($objFileops->getMd5());
+//        if($md5IsUnique !== true) {
+//            //md5 already exists. This file has already been processed
+//            die("File has already been imported: " .$fileFullPath);
+//        }
 
         //--- Read file into array
         $result = $this->getRepo('Fileops')->readFile($fileFullPath);
@@ -304,18 +346,18 @@ class FileopsController extends BaseController
         }
         $objFileops->setOrderNew($result['data']['orderNew'])
                    ->setOrderUpdate($result['data']['orderUpdate']);
-        
+
 
         //--- Save Import record
         $objFileops->setStatus(Fileops::$STATUS_SUCCESS);
         $this->persistEntity($objFileops);
         $this->flushEntities();
-        
+
         $result = array('status' => true,
                         'data'   => $objFileops);
         return $result;
-    }    
-    
+    }
+
     /**
     * Creates a form to edit a Fileops entity.
     *
@@ -334,8 +376,8 @@ class FileopsController extends BaseController
 
         return $form;
     }
-    
-    
+
+
     /**
      * Edits an existing Fileops entity.
      *
@@ -366,8 +408,8 @@ class FileopsController extends BaseController
             'delete_form' => $deleteForm->createView(),
         ));
     }
-    
-    
+
+
     /**
      * Deletes a Fileops entity.
      *
@@ -392,7 +434,7 @@ class FileopsController extends BaseController
         return $this->redirect($this->generateUrl('fileops'));
     }
 
-    
+
     /**
      * Creates a form to delete a Fileops entity by id.
      *
@@ -409,56 +451,56 @@ class FileopsController extends BaseController
             ->getForm()
         ;
     }
-    
-    
+
+
     /**
      * Get list of import files
-     * 
+     *
      * Return an array containing the full path of all .csv files requireing import
-     * 
-     * @return array 
+     *
+     * @return array
      */
-    private function _getImportFile() {
-        $basePath = $this->get('kernel')->getRootDir();
-        //@TODO Move import file directory to a config file
-        $importDirRealPath = realpath($basePath ."/../src/XarismaBundle/" .$this->importDirPath);
+    private function _getImportFiles($importDirRealPath) {
+        
         if($importDirRealPath === false) {
             return array('status' => false,
-                         'data'   => 'ERROR: Could not locate import dir: ' .$this->importDirPath
+                         'data'   => 'ERROR: Could not locate import dir: '
                         );
         }
         $files = scandir($importDirRealPath, SCANDIR_SORT_DESCENDING);
         $aryImportFiles = array();
         $numImportFiles = count($files);
+        
         for($i=0; $i<$numImportFiles; $i++) {
             $importFullPath = $importDirRealPath .DIRECTORY_SEPARATOR .$files[$i];
             $ext = strtolower(pathinfo($importFullPath, PATHINFO_EXTENSION));
+            // Filename must end with .csv, and contain word 'Production'
             if($ext == 'csv' && strstr($importFullPath, 'Production') !== FALSE) {
                 $aryImportFiles[] = $importFullPath;
             }
         }
-        return array('status' => true,
+        $result = array('status' => true,
                      'data'   => $aryImportFiles
-                    );
+                   );
+
+        return $result;
     }
 
-    
+
     /**
      * Get full path to export file
-     * 
+     *
      * @return array
      */
     private function _getExportFilePath() {
-        
-        $basePath = $this->get('kernel')->getRootDir();
-        //@TODO Refactor hard-coding of import dir to config file
-        $importDirRealPath = realpath($basePath ."/../src/XarismaBundle/" .$this->importDirPath);
-        if($importDirRealPath === false) {
+
+        $exportDirRealPath = ProgramConfig::getExportDir();
+        if($exportDirRealPath === false) {
             return array('status' => false,
                          'data'   => 'ERROR: Could not locate export dir: ' .$this->importDirPath
                         );
         }
-        
+
         $datestring = date("Y-m-d_h-m-n-s");
         $importDirRealPath .= '/export_' .$datestring .'.csv';
         $result = array('status' => true,
@@ -471,14 +513,14 @@ class FileopsController extends BaseController
         }
         return $result;
     }
-    
-    
+
+
     /**
      * Get md5 hash for a file
-     * 
+     *
      * This function will read a file, and return it's md5 hash, uniquiely
      * identifying the contents of the file.
-     * 
+     *
      * @param string $fileFullPath Full path to file
      * @return array
      */
@@ -493,14 +535,14 @@ class FileopsController extends BaseController
                      'data'   => $md5
                     );
     }
- 
-    
+
+
     /**
      * Import customer Orders
-     * 
+     *
      * Import customer orders from the import array passed as a parameter, and
      * return customer record counts.
-     * 
+     *
      * @param array $aryImport
      * @return type
      * @throws \Exception
@@ -509,10 +551,10 @@ class FileopsController extends BaseController
         $numRecs   = count($aryImport);
         $newOrd    = 0;
         $updateOrd = 0;
-        
+
         for($i=0; $i<$numRecs; $i++) {
             $orderNum = $aryImport[$i]['orderNum'];
-            
+
             $order = $this->getRepo('Custorder')->findByOrdernumber($orderNum);
             if(!$order) {
                 //This is a new order record
@@ -537,34 +579,34 @@ class FileopsController extends BaseController
             }
         }
         $this->flushEntities();
-        
+
         $data = array('orderNew' => $newOrd,
                       'orderUpdate' => $updateOrd);
         $response = array('status' => true,
                           'data'   => $data);
         return $response;
-    }    
-  
-    
+    }
+
+
     /**
      * Import customer records
-     * 
+     *
      * This function will import customer records from the array passed as a
      * paramter, and return the count of records created/updated
-     * 
+     *
      * @param type $aryImport
      * @return type
-     */    
+     */
     private function _importCustomers($aryImport) {
-        
+
         $numRecs = count($aryImport);
         $aryProcessed = array();
         $newCust = 0;
         $updateCust = 0;
-        
+
         for($i=0; $i<$numRecs; $i++) {
             $customerNum = $aryImport[$i]['customernumber'];
-            
+
             if(in_array($customerNum, $aryProcessed)) {
                 continue;
             }
@@ -591,19 +633,19 @@ class FileopsController extends BaseController
                         'data'   => $data);
         return $result;
     }
-    
-    
+
+
     /**
      * Reset 'needsExport' flag for customer orders
-     * 
+     *
      * This function will reset the 'needsExport' flag for customer orders, whos
      * ordernumbers are passed in an array. This function uses a direct database
      * query, rather than using the Doctrine ORM. This is to avoid the ORM firing
      * lifecycle events that would set the 'needsExport' flag again upon update.
-     * 
+     *
      * @todo Move resetExportFlag function somewhere better, probably the repository
      * @todo Make $aryOrderList param optional. Reset flag for ALL records if list is not provided
-     * 
+     *
      * @param array $aryOrderList
      * @return boolean True if update succeeded, false otherwise
      */
@@ -618,5 +660,5 @@ class FileopsController extends BaseController
         $result = $statement->execute();
         return $result;
     }
-    
+
 }

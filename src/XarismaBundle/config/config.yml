@@ -1,0 +1,6 @@
+## This file contains program configuration parameters
+## for the Xarisma production program
+
+fileops_import_dir: import
+fileops_export_dir: export
+
