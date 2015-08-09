@@ -85,7 +85,16 @@ class FileopsRepository extends BaseRepository
     }
 
     
-    
+    /**
+     * Get records to export
+     * 
+     * This function will select all of the records from the database that need
+     * to be exported, and return them as an array. Records are selected that
+     * are not marked as deleted, and have their 'needsexport' field set in the
+     * customer orders table. 
+     * 
+     * @return boolean
+     */
     public function getExportArray() {
          $em = $this->getEntityManager();
          
@@ -106,7 +115,7 @@ class FileopsRepository extends BaseRepository
     
     
     public function writeFile(array $aryExport, $filepath) {
-        
+
         $exportDir = dirname($filepath);
         $numRecs = count($aryExport);
         $headerLine = "Number,Status" .PHP_EOL;

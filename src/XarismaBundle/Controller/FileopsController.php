@@ -101,17 +101,20 @@ class FileopsController extends BaseController
     {
         $importDir = ProgramConfig::getImportDir();
         
+        //--- Get list of all .csv files that need to be imported
+        $result = $this->_getImportFiles($importDir);
+        if($result['status'] === false) {
+            throw new Exception($result['data']);
+        }
+        $aryImportFiles = $result['data'];
+
         if(! is_writable($importDir)) {
             //Crap out and return to list if import directory not writeable
-            $this->addError("ERROR: Import directory not writeable.");
-            
+            $this->addError("ERROR: Import directory not writeable");
+        } elseif (count($aryImportFiles) === 0) {
+            $this->addNotice("There are no new files to import");                    
         } else {
-            //--- Get list of all .csv files in import directory
-            $result = $this->_getImportFiles($importDir);
-            if($result['status'] === false) {
-                throw new Exception($result['data']);
-            }
-            $aryImportFiles = $result['data'];
+
 
             //--- Loop through list and process each impoprt file
             $numFiles = count($aryImportFiles);
@@ -154,86 +157,73 @@ class FileopsController extends BaseController
 
     public function newexportAction()
     {
-        //--- Create Fileops Object
-        $objFileops = new Fileops();
-        $objFileops->setEventTime(new \DateTime())
-                    ->setAction('E')
-                    ->setDeleted(0)
-                    ->setRecs(0)
-                    ->setErrors(0)
-                    ->setCustomerNew(0)
-                    ->setCustomerUpdate(0)
-                    ->setOrderNew(0)
-                    ->setOrderUpdate(0)
-                    ->setStatus(Fileops::$STATUS_EXPORTING);
-
-        //--- Get export filename
-        $result = $this->_getExportFilePath();
-        if($result['status'] === false) {
-            throw new Exception($result['data']);
-        }
-        $this->fileName = $result['data'];
-        $objFileops->setFilename($this->fileName);
-
-        //--- Create Export Array
-        $result = $this->getrepo('fileops')->getExportArray();
+        $exportDir = ProgramConfig::getExportDir();
+        
+        //--- Get records to export as array
+        $result = $this->getrepo('Fileops')->getExportArray();
         if($result['status'] === false) {
             throw new Exception($result['data']);
         }
         $aryExport = $result['data'];
 
-        //--- Bail out if no records to export
-        if(count($aryExport) === 0) {
-            //There are no records in the database that require export
-            $objFileops->setStatus(Fileops::$STATUS_NORECS)
-                             ->setMd5(null)
-                             ->setFilename('Null');
+        
+        if(! is_writable($exportDir)) {
+            //Crap out and return to list if export directory not writeable
+            $this->addError("ERROR: Export directory not writeable");
+        } elseif(count($aryExport) === 0) {
+            $this->addNotice("There are no records that require export");
+        } else {
+
+            //--- Create Fileops Object
+            $objFileops = new Fileops();
+            $objFileops->setEventTime(new \DateTime())
+                        ->setAction('E')
+                        ->setDeleted(0)
+                        ->setRecs(0)
+                        ->setErrors(0)
+                        ->setCustomerNew(0)
+                        ->setCustomerUpdate(0)
+                        ->setOrderNew(0)
+                        ->setOrderUpdate(0)
+                        ->setStatus(Fileops::$STATUS_EXPORTING);
+
+            //--- Get export filename
+            $datestring = date("Y-m-d_h-m-n-s");
+            $exportFullPath = $exportDir .'/export_' .$datestring .'.csv';
+            $objFileops->setFilename($exportFullPath);
+
+            $objFileops->setRecs(count($aryExport));
+
+            //--- Write records to Export File
+            $result = $this->getRepo('Fileops')->writeFile($aryExport, $exportFullPath);
+            if($result['status'] === false) {
+                throw new Exception($result['data']);
+            }
+            
+            //--- Update fileops object
+            $objFileops->setStatus(Fileops::$STATUS_SUCCESS)
+                       ->setCustomerUpdate($result['data']['custUpdate'])
+                       ->setOrderUpdate($result['data']['orderUpdate'])
+                       ->setOrderNew(0)
+                       ->setCustomerNew(0);
+
+            //--- Generate md5 of this file for later identification
+            $result = $this->_getMd5($exportFullPath);
+            if($result['status'] === false) {
+                throw new Exception($result['data']);
+            }
+            $this->md5 = $result['data'];
+            $objFileops->setMd5($this->md5);
+
+            //--- Save Fileops Object
             $this->persistEntity($objFileops);
             $this->flushEntities();
 
-            $deleteForm = $this->createDeleteForm($objFileops->getId()); //Dummy form to pass to view
-            return $this->render('XarismaBundle:Fileops:show.html.twig',
-                                 array('entity'      => $objFileops,
-                                       'delete_form' => $deleteForm->createView(),
-                                        ));
+            //--- Reset export flag for exported records
+            $this->resetExportFlag($aryExport);
         }
 
-        $objFileops->setRecs(count($aryExport));
-
-        //--- Write Export File
-        $result = $this->getRepo('Fileops')->writeFile($aryExport, $objFileops->getFilename());
-        if($result['status'] === false) {
-            throw new Exception($result['data']);
-        }
-        $objFileops->setStatus(Fileops::$STATUS_SUCCESS)
-                   ->setCustomerUpdate($result['data']['custUpdate'])
-                   ->setOrderUpdate($result['data']['orderUpdate'])
-                   ->setOrderNew(0)
-                   ->setCustomerNew(0);
-
-
-        //--- Generate md5 of this file for later identification
-        $result = $this->_getMd5($this->fileName);
-        if($result['status'] === false) {
-            throw new Exception($result['data']);
-        }
-        $this->md5 = $result['data'];
-        $objFileops->setMd5($this->md5);
-
-        //--- Save Fileops Object
-        $this->persistEntity($objFileops);
-        $this->flushEntities();
-
-        //--- Reset export flag for exported records
-        $this->resetExportFlag($aryExport);
-
-        //---Display new import record
-        $deleteForm = $this->createDeleteForm($objFileops->getId()); //Dummy form to pass to view
-
-        return $this->render('XarismaBundle:Fileops:show.html.twig', array(
-            'entity'      => $objFileops,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->redirect($this->generateUrl('fileops'));
     }
 
     /**
@@ -483,34 +473,6 @@ class FileopsController extends BaseController
                      'data'   => $aryImportFiles
                    );
 
-        return $result;
-    }
-
-
-    /**
-     * Get full path to export file
-     *
-     * @return array
-     */
-    private function _getExportFilePath() {
-
-        $exportDirRealPath = ProgramConfig::getExportDir();
-        if($exportDirRealPath === false) {
-            return array('status' => false,
-                         'data'   => 'ERROR: Could not locate export dir: ' .$this->importDirPath
-                        );
-        }
-
-        $datestring = date("Y-m-d_h-m-n-s");
-        $importDirRealPath .= '/export_' .$datestring .'.csv';
-        $result = array('status' => true,
-                        'data'   => $importDirRealPath
-                       );
-        if($importDirRealPath === false) {
-            return array('status' => false,
-                         'data'   => 'ERROR: Could not set export file: ' .$this->importDirPath
-                        );
-        }
         return $result;
     }
 
