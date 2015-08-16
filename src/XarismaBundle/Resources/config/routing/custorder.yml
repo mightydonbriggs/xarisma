@@ -2,6 +2,15 @@ custorder:
     path:     /
     defaults: { _controller: "XarismaBundle:Custorder:index" }
 
+custorder_track:
+    path: /track
+    defaults: { _controller: "XarismaBundle:Custorder:track" }
+    
+custorder_ajax:
+    path: /ajax
+    defaults: { _controller: "XarismaBundle:Custorder:ajax" }
+    methods:  [POST, PUT]
+    
 custorder_show:
     path:     /{id}/show
     defaults: { _controller: "XarismaBundle:Custorder:show" }

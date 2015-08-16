@@ -6,6 +6,10 @@ use XarismaBundle\Controller\BaseController;
 
 use XarismaBundle\Entity\Custorder;
 use XarismaBundle\Form\CustorderType;
+use XarismaBundle\Form\OrderTrackForm;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 
 /**
  * Custorder controller.
@@ -129,6 +133,81 @@ class CustorderController extends BaseController
         ));
     }
 
+    public function trackAction() {
+        
+        $entity = new Custorder();
+        $form = $this->createTrackForm($entity);
+        
+        return $this->render('XarismaBundle:Custorder:track.html.twig', array(
+//            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+    
+    
+    /**
+     * Process Ajax Request
+     * 
+     * This is a worker function called by Ajax. The Ajax requst will send a custOrder
+     * @param Request $request
+     * @return \XarismaBundle\Controller\response
+     */
+    public function ajaxAction(Request $request) {
+
+        $id = $request->request->get('id');       //Get order ID from Ajax
+        
+        $list = $this->getDoctrine()->getRepository('XarismaBundle:Custorder')->findLikeId($id);
+        $list = json_encode($list);
+//        return new response("BALK: " .$id, 200);  //Reflector for testing
+        
+//        $numRecs = count($list);$numRecs
+            
+//            return new response($numRecs, 200);
+            return new response($list, 200);
+        }
+    
+    public function createTrackForm(Custorder $entity) {
+        
+        $defaultData = array('ordernumber' => 'Enter Order Number');
+        $attributes  = array( 'attr' => array ( 'id' => 'frmTrack' ));
+
+        $form = $this->createFormBuilder($defaultData, $attributes)
+                    ->setMethod('POST')
+                    ->setAction($this->generateUrl('custorder_ajax'))
+                    ->add('txtOrderSearch', 'text', array('mapped' => false))
+                    ->add('notes', 'textarea', array('mapped' => false))
+                    ->add('submit', 'submit')
+                    ->getForm();
+                  
+        return $form;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
     * Creates a form to edit a Custorder entity.
     *
@@ -214,4 +293,6 @@ class CustorderController extends BaseController
             ->getForm()
         ;
     }
+    
+
 }

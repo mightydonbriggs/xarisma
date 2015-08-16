@@ -1,0 +1,54 @@
+{% extends 'XarismaBundle:Default:base.html.twig' %}
+
+{% block body -%}
+    <h1>Order Workflow Tracking</h1>
+
+    {{ form(form) }}
+
+{#    {{ dump(form.vars.value['ordernumber']) }}#}
+    {{ dump(form) }}
+
+{% endblock %}
+
+{% block pagejs %}
+<script type="text/javascript">
+
+    var frmTrack; 
+    var searchBox;
+    var btnSubmit;
+    
+    window.onload = function() {
+       frmTrack  = document.getElementById("frmTrack");
+       searchBox = document.getElementById("form_txtOrderSearch");
+       btnSubmit = document.getElementById("form_submit");
+       
+      searchBox.onkeyup = function(e, callback) {
+           gitter(e, callback);
+      }
+      
+      btnSubmit.onclick = function(e, callback) {
+          e.preventDefault();
+          gitter(e, callback);
+      }
+    }
+    
+    function gitter(e, callback) {
+        console.log('Firing Gitter');
+        var searchTxt = searchBox.value;
+        
+        if(searchTxt.length >= 3) {
+            $.ajax({
+                type: "POST",
+                url:  "{{ form.vars['action'] }}",
+                data: { id: searchTxt } ,
+                success: function(data, dataType) { console.log(data); },
+                error: function(XMLHttpRequest, textStatus, errorThrown)
+                {
+                    alert('Error : ' + errorThrown);
+                }
+            }); 
+        }
+    }
+</script>
+
+{% endblock %}

@@ -17,6 +17,29 @@ class CustorderRepository extends BaseRepository
         return $result;
     }
     
+    public function findLikeId($id) {
+        
+        $em = $this->getEntityManager();
+
+        $id = (string) $id .'%';
+//        $dql = 'SELECT co.id, co.ordernumber, co.orderdate, co.orderstatus, cu.accountname customername, co.needsexport '
+//             . 'FROM XarismaBundle:Custorder co '
+//             . 'LEFT JOIN co.customer cu'
+//             . "WHERE co.id LIKE'" .$id ."%'";
+        
+        $query = $this->createQueryBuilder('co')
+               ->select('co.ordernumber, cu.accountname customername, co.orderdate')
+               ->join('co.customer', 'cu')
+               ->where('co.ordernumber LIKE :srchid')
+               ->setParameter('srchid', $id)
+               ->getQuery();
+        
+        $result = $query->getArrayResult();
+
+        return $result;
+    }
+
+
     public function getArrayList($fieldlist = null, $deleted = false) {
         
         $em = $this->getEntityManager();
