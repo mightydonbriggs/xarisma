@@ -5,48 +5,117 @@
 
     {{ form(form) }}
 
+    <div id="div_orderlist">
+        <table id="table_orderlist" >
+            <tr class='headrow'>
+                <th class='colhead'>Order #</th><th class='colhead'>Customer</th>
+            </tr>
+            <tr class='messagerow'>
+                <td colspan='2' class='msgcell'>Enter order number</td>
+            </tr>
+        </table>
+    </div>
 {#    {{ dump(form.vars.value['ordernumber']) }}#}
-    {{ dump(form) }}
+{#    {{ dump(form) }}#}
 
+{% endblock %}
+
+{% block pagecss %}
+<style>
+    #div_orderlist {
+        width: 50%; 
+        background-color: #E6E6E6;
+        display: none;
+    }
+</style>
 {% endblock %}
 
 {% block pagejs %}
 <script type="text/javascript">
 
+    // Declare global variables
     var frmTrack; 
     var searchBox;
     var btnSubmit;
+    var orderTable;
     
+    //
+    // Initialize global variables and set event listeners when page 
+    // is done loading.
+    //
     window.onload = function() {
-       frmTrack  = document.getElementById("frmTrack");
-       searchBox = document.getElementById("form_txtOrderSearch");
-       btnSubmit = document.getElementById("form_submit");
+       frmTrack   = document.getElementById("frmTrack");
+       searchBox  = document.getElementById("form_txtOrderSearch");
+       orderTable = document.getElementById("table_orderlist");
+       btnSubmit  = document.getElementById("form_submit");
        
       searchBox.onkeyup = function(e, callback) {
            gitter(e, callback);
-      }
-      
-      btnSubmit.onclick = function(e, callback) {
-          e.preventDefault();
-          gitter(e, callback);
-      }
+      }      
     }
     
+    //
+    // This function will send an order number, or partial order number
+    // to the server via Ajax, and return a list of matching customer orders
+    //
     function gitter(e, callback) {
-        console.log('Firing Gitter');
+        //console.log('Firing Gitter');
         var searchTxt = searchBox.value;
         
-        if(searchTxt.length >= 3) {
+        //Turn on order list box if there is text in search box
+        if(searchTxt.length > 0) {
+            console.log(document.getElementById("div_orderlist"));
+            document.getElementById("div_orderlist").style.display = 'block';
+        }
+        if(searchTxt.length >= 1) {
             $.ajax({
                 type: "POST",
                 url:  "{{ form.vars['action'] }}",
                 data: { id: searchTxt } ,
-                success: function(data, dataType) { console.log(data); },
+                success: function(data, dataType) {
+                    showOrderTable(data);
+                },
                 error: function(XMLHttpRequest, textStatus, errorThrown)
                 {
                     alert('Error : ' + errorThrown);
                 }
             }); 
+        }
+    }
+    
+    function showOrderTable(jsonOrderList) {
+
+        var orderList = JSON.parse(jsonOrderList);
+        var msgRow    = orderTable.getElementsByClassName("messagerow")[0];
+        var msgCell   = orderTable.getElementsByClassName("msgcell")[0];
+        var numRecs   = orderList.length;
+        
+        console.log(numRecs); 
+        
+        $('.datarow').remove();
+        if(numRecs === 0) {
+            msgRow.style.display = '';
+            msgCell.innerHTML = "No records found";
+        } else if( numRecs <= 20) {
+            //We have a good number of recs. Display them in table
+            msgRow.style.display = 'none';
+            
+            for (i = 0; i < numRecs; i++) { 
+                var newRow = orderTable.insertRow(orderTable.rows.length);
+                newRow.className = 'datarow';
+                var orderNumCell = newRow.insertCell(0);
+                var custNameCell = newRow.insertCell(1);
+                // Append a text node to the cell
+                var newText  = document.createTextNode(orderList[i]['ordernumber']);
+                orderNumCell.appendChild(newText);            
+                var newText  = document.createTextNode(orderList[i]['customername']);
+                custNameCell.appendChild(newText);            
+            }
+            
+        } else {
+            msgRow.style.display = '';
+            msgCell.innerHTML = "Too many records to show: ".concat(numRecs);
+            $('.datarow').remove();
         }
     }
 </script>

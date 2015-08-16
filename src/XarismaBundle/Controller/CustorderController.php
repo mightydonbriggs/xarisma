@@ -9,6 +9,8 @@ use XarismaBundle\Form\CustorderType;
 use XarismaBundle\Form\OrderTrackForm;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
+
 
 
 /**
@@ -168,15 +170,21 @@ class CustorderController extends BaseController
     
     public function createTrackForm(Custorder $entity) {
         
-        $defaultData = array('ordernumber' => 'Enter Order Number');
+        $defaultData = array('txtOrderSearch' => 'Enter Order Number');
         $attributes  = array( 'attr' => array ( 'id' => 'frmTrack' ));
 
         $form = $this->createFormBuilder($defaultData, $attributes)
                     ->setMethod('POST')
                     ->setAction($this->generateUrl('custorder_ajax'))
-                    ->add('txtOrderSearch', 'text', array('mapped' => false))
-                    ->add('notes', 'textarea', array('mapped' => false))
-                    ->add('submit', 'submit')
+                
+                    ->add('txtOrderSearch', 'text', array(
+                        'required' => true,
+                        'mapped'   => false,
+                        'label'    => 'Order #:'
+                        ))
+                
+//                    ->add('notes', 'textarea', array('mapped' => false))
+//                    ->add('submit', 'submit')
                     ->getForm();
                   
         return $form;
