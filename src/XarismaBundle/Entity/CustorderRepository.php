@@ -22,13 +22,9 @@ class CustorderRepository extends BaseRepository
         $em = $this->getEntityManager();
 
         $id = (string) $id .'%';
-//        $dql = 'SELECT co.id, co.ordernumber, co.orderdate, co.orderstatus, cu.accountname customername, co.needsexport '
-//             . 'FROM XarismaBundle:Custorder co '
-//             . 'LEFT JOIN co.customer cu'
-//             . "WHERE co.id LIKE'" .$id ."%'";
         
         $query = $this->createQueryBuilder('co')
-               ->select('co.ordernumber, cu.accountname customername, co.orderdate')
+               ->select('co.ordernumber, cu.accountname customername, co.orderstatus, co.orderdate, SUBSTRING(co.orderdate, 1, 10) as orderdatestr')
                ->join('co.customer', 'cu')
                ->where('co.ordernumber LIKE :srchid')
                ->setParameter('srchid', $id)

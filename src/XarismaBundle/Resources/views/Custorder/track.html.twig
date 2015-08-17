@@ -3,17 +3,49 @@
 {% block body -%}
     <h1>Order Workflow Tracking</h1>
 
-    {{ form(form) }}
+    <div id='page-canvas'>
+        <div id="form" id="frmTrack">
+            <form name="form" method="post" action="/app_dev.php/custorder/ajax" id="frmTrack">
+               <div>                
+                   <label for="txtOrderSearch" class="required">Order #:</label>
+                   <input type="text" id="txtOrderSearch" name="form[txtOrderSearch]" required="required" />
+                   <input type="submit" id='btnSubmit'
+               </div>
+            </form>
+        </div>
 
-    <div id="div_orderlist">
-        <table id="table_orderlist" >
-            <tr class='headrow'>
-                <th class='colhead'>Order #</th><th class='colhead'>Customer</th>
+        <table id='table_orderdetail'>
+            <tr>
+                <th>Customer</th>
+                <td id='cell_customer'></td>
             </tr>
-            <tr class='messagerow'>
-                <td colspan='2' class='msgcell'>Enter order number</td>
+            <tr>
+                <th>Order #</th>
+                <td id='cell_ordernumber'></td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td id='cell_orderstatus'></td>
+            </tr>
+            <tr>
+                <th>Order Date</th>
+                <td id='cell_orderdate'></td>
             </tr>
         </table>
+
+        <div id="div_orderlist">
+            <table id="table_orderlist" class='table-striped'>
+                <tr class='headrow'>
+                    <th class='colhead'>Order #</th>
+                    <th class='colhead'>Customer</th>
+                    <th class='colhead'>Status</th>
+                    <th class='colhead'>Order Date</th>
+                </tr>
+                <tr class='messagerow'>
+                    <td colspan='2' class='msgcell'>Enter order number</td>
+                </tr>
+            </table>
+        </div>        
     </div>
 {#    {{ dump(form.vars.value['ordernumber']) }}#}
 {#    {{ dump(form) }}#}
@@ -23,9 +55,30 @@
 {% block pagecss %}
 <style>
     #div_orderlist {
+        position: absolute;
+        left: 120px;
+        top: 190px;
         width: 50%; 
-        background-color: #E6E6E6;
+        z-index: 100;
         display: none;
+        border: solid black;
+        border-width: 1px;
+    }
+    #table_orderlist {
+        background-color: #3276b1;
+        width: 100%;
+    }
+    .headrow {
+        background-color: #3276b1;
+    }
+    #page-canvas {
+        min-height: 420px;
+    }
+    table#table_orderdetail tr th {
+        background-color: #cfcfcf;
+        padding-right: 7px;
+        border-right: 7px;
+        
     }
 </style>
 {% endblock %}
@@ -44,14 +97,20 @@
     // is done loading.
     //
     window.onload = function() {
-       frmTrack   = document.getElementById("frmTrack");
-       searchBox  = document.getElementById("form_txtOrderSearch");
-       orderTable = document.getElementById("table_orderlist");
-       btnSubmit  = document.getElementById("form_submit");
-       
-      searchBox.onkeyup = function(e, callback) {
-           gitter(e, callback);
-      }      
+        frmTrack   = document.getElementById("frmTrack");
+        searchBox  = document.getElementById("txtOrderSearch");
+        orderTable = document.getElementById("table_orderlist");
+        btnSubmit  = document.getElementById("form_submit");
+
+        searchBox.onkeyup = function(e, callback) {
+            if(e.which === 27 ) {
+                //Escape key was pressed. Hide form
+                searchBox.value = '';
+                document.getElementById("div_orderlist").style.display = 'none';
+            }
+            //Else pass contents of search box to Ajax function
+            gitter(e, callback);
+        }      
     }
     
     //
@@ -64,7 +123,7 @@
         
         //Turn on order list box if there is text in search box
         if(searchTxt.length > 0) {
-            console.log(document.getElementById("div_orderlist"));
+//console.log(document.getElementById("div_orderlist"));
             document.getElementById("div_orderlist").style.display = 'block';
         }
         if(searchTxt.length >= 1) {
@@ -90,12 +149,15 @@
         var msgCell   = orderTable.getElementsByClassName("msgcell")[0];
         var numRecs   = orderList.length;
         
-        console.log(numRecs); 
+console.log(numRecs); 
         
         $('.datarow').remove();
         if(numRecs === 0) {
             msgRow.style.display = '';
             msgCell.innerHTML = "No records found";
+        } else if ( numRecs == 1) {
+            //We have found the record to update. Display it
+            displayRecord(orderList[0]);
         } else if( numRecs <= 20) {
             //We have a good number of recs. Display them in table
             msgRow.style.display = 'none';
@@ -105,11 +167,18 @@
                 newRow.className = 'datarow';
                 var orderNumCell = newRow.insertCell(0);
                 var custNameCell = newRow.insertCell(1);
+                var orderStatusCell = newRow.insertCell(2);
+                var orderDateCell = newRow.insertCell(3);
+                
                 // Append a text node to the cell
                 var newText  = document.createTextNode(orderList[i]['ordernumber']);
                 orderNumCell.appendChild(newText);            
                 var newText  = document.createTextNode(orderList[i]['customername']);
                 custNameCell.appendChild(newText);            
+                var newText  = document.createTextNode(orderList[i]['orderstatus']);
+                orderStatusCell.appendChild(newText);            
+                var newText  = document.createTextNode(orderList[i]['orderdatestr']);
+                orderDateCell.appendChild(newText);  
             }
             
         } else {
@@ -117,6 +186,14 @@
             msgCell.innerHTML = "Too many records to show: ".concat(numRecs);
             $('.datarow').remove();
         }
+    }
+    
+    function displayRecord(orderRec) {
+        document.getElementById("div_orderlist").style.display = 'none';
+        document.getElementById("cell_customer").innerHTML = orderRec['customername'];
+        document.getElementById("cell_ordernumber").innerHTML = orderRec['ordernumber'];
+        document.getElementById("cell_orderstatus").innerHTML = orderRec['orderstatus'];
+        document.getElementById("cell_orderdate").innerHTML = orderRec['orderdatestr'];
     }
 </script>
 

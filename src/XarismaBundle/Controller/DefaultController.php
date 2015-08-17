@@ -9,10 +9,11 @@ use Symfony\Component\Config\FileLocator;
 {
     public function indexAction()
     {
-//        $id = '1393';       //Get order ID from Ajax
-//        
-//        $list = $this->getDoctrine()->getRepository('XarismaBundle:Custorder')->findLikeId($id);
+        $id = '1393';       //Get order ID from Ajax
+        
+        $list = $this->getDoctrine()->getRepository('XarismaBundle:Custorder')->findLikeId($id);
        
+dump($list);        
         
         return $this->render('XarismaBundle:Default:index.html.twig');
     }
