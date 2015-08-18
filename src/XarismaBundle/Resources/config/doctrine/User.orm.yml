@@ -1,6 +1,7 @@
 XarismaBundle\Entity\User:
     type: entity
-    table: user
+    table: fos_user
+    
     repositoryClass: XarismaBundle\Entity\UserRepository
     
     id:
@@ -11,20 +12,10 @@ XarismaBundle\Entity\User:
             comment: ''
             id: true
             generator:
-                strategy: IDENTITY
+                strategy: AUTO
+                
     fields:
-        username:
-            type: string
-            nullable: false
-            length: 10
-            fixed: false
-            comment: ''
-        password:
-            type: string
-            nullable: true
-            length: 45
-            fixed: false
-            comment: ''
+
         firstname:
             type: string
             nullable: true
@@ -39,18 +30,6 @@ XarismaBundle\Entity\User:
             fixed: false
             comment: ''
             column: lastName
-        accesslevel:
-            type: integer
-            nullable: false
-            unsigned: false
-            comment: ''
-            column: accessLevel
-        roles:
-            type: string
-            nullable: true
-            length: 255
-            fixed: false
-            comment: ''
         updateby:
             type: integer
             nullable: true
@@ -69,8 +48,8 @@ XarismaBundle\Entity\User:
             column: dateUpdated
         deleted:
             type: integer
-            nullable: false
+            nullable: ytur
             unsigned: false
-            comment: ''
-            column: Deleted
+            default: false
+            comment: 'Set to true for soft delete'
     lifecycleCallbacks: {  }
