@@ -3,26 +3,21 @@
 namespace XarismaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
 /**
  * User
  */
-class User
+class User extends \FOS\UserBundle\Model\User
 {
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
+
 
     /**
      * @var string
      */
-    private $username;
-
-    /**
-     * @var string
-     */
-    private $password;
+    protected $username;
 
     /**
      * @var string
@@ -42,7 +37,7 @@ class User
     /**
      * @var string
      */
-    private $roles;
+    protected $roles;
 
     /**
      * @var integer
@@ -65,6 +60,10 @@ class User
     private $deleted;
 
 
+    public function __construct() {
+        parent::__construct();
+    }
+    
     /**
      * Get id
      *
@@ -98,28 +97,6 @@ class User
         return strtoupper($this->username);
     }
 
-    /**
-     * Set password
-     *
-     * @param string $password
-     * @return User
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * Get password
-     *
-     * @return string 
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
 
     /**
      * Set firstname
@@ -196,7 +173,7 @@ class User
      * @param string $roles
      * @return User
      */
-    public function setRoles($roles)
+    public function setRoles(array $roles)
     {
         $this->roles = $roles;
 
