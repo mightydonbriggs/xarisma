@@ -1,0 +1,13 @@
+[15-Aug-2015 01:38:09 America/Chicago] PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in /var/www/xarisma/src/XarismaBundle/Controller/CustorderController.php on line 152
+[15-Aug-2015 01:38:09 America/Chicago] PHP Stack trace:
+[15-Aug-2015 01:38:09 America/Chicago] PHP   1. {main}() /var/www/xarisma/web/app_dev.php:0
+[15-Aug-2015 01:38:09 America/Chicago] PHP   2. Symfony\Component\HttpKernel\Kernel->handle() /var/www/xarisma/web/app_dev.php:28
+[15-Aug-2015 01:38:09 America/Chicago] PHP   3. Symfony\Component\HttpKernel\DependencyInjection\ContainerAwareHttpKernel->handle() /var/www/xarisma/app/bootstrap.php.cache:2381
+[15-Aug-2015 01:38:09 America/Chicago] PHP   4. Symfony\Component\HttpKernel\HttpKernel->handle() /var/www/xarisma/app/bootstrap.php.cache:3137
+[15-Aug-2015 01:38:09 America/Chicago] PHP   5. Symfony\Component\HttpKernel\HttpKernel->handleRaw() /var/www/xarisma/app/bootstrap.php.cache:2988
+[15-Aug-2015 01:38:09 America/Chicago] PHP   6. Symfony\Component\HttpKernel\Controller\TraceableControllerResolver->getController() /var/www/xarisma/app/bootstrap.php.cache:3019
+[15-Aug-2015 01:38:09 America/Chicago] PHP   7. Symfony\Component\HttpKernel\Controller\ControllerResolver->getController() /var/www/xarisma/vendor/symfony/symfony/src/Symfony/Component/HttpKernel/Controller/TraceableControllerResolver.php:46
+[15-Aug-2015 01:38:09 America/Chicago] PHP   8. Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver->createController() /var/www/xarisma/app/cache/dev/classes.php:2841
+[15-Aug-2015 01:38:09 America/Chicago] PHP   9. class_exists() /var/www/xarisma/app/cache/dev/classes.php:2932
+[15-Aug-2015 01:38:09 America/Chicago] PHP  10. spl_autoload_call() /var/www/xarisma/app/cache/dev/classes.php:2932
+[15-Aug-2015 01:38:09 America/Chicago] PHP  11. Symfony\Component\Debug\DebugClassLoader->loadClass() /var/www/xarisma/app/cache/dev/classes.php:0
