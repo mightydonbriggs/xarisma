@@ -1,9 +1,11 @@
+/app/AppKernel.php
 /app/cache/*
 /app/logs/*
 /app/config/parameters.yml
+/app/config/config.yml
 !app/cache/.gitkeep
 !app/logs/.gitkeep
-composer.*
+/composer.*
 /vendor/*
 
 #/web/bundles/
@@ -11,3 +13,4 @@ composer.*
 #/app/phpunit.xml
 #/build/
 #/bin/
+
