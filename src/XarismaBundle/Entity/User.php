@@ -7,23 +7,18 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * User
  */
-class User
+class User extends \FOS\UserBundle\Model\User
 {
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $username;
-
-    /**
-     * @var string
-     */
-    private $password;
-
+     protected $username;
+    
     /**
      * @var string
      */
@@ -42,7 +37,7 @@ class User
     /**
      * @var string
      */
-    private $roles;
+    protected $roles;
 
     /**
      * @var integer
@@ -55,7 +50,7 @@ class User
     private $datecreated;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeset
      */
     private $dateupdated;
 
@@ -65,6 +60,10 @@ class User
     private $deleted;
 
 
+    public function __construct() {
+        parent::__construct();
+    }
+    
     /**
      * Get id
      *
@@ -96,29 +95,6 @@ class User
     public function getUsername()
     {
         return strtoupper($this->username);
-    }
-
-    /**
-     * Set password
-     *
-     * @param string $password
-     * @return User
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * Get password
-     *
-     * @return string 
-     */
-    public function getPassword()
-    {
-        return $this->password;
     }
 
     /**
@@ -193,10 +169,10 @@ class User
     /**
      * Set roles
      *
-     * @param string $roles
+     * @param array $roles
      * @return User
      */
-    public function setRoles($roles)
+    public function setRoles(array $roles)
     {
         $this->roles = $roles;
 
