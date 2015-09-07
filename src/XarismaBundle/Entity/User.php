@@ -266,6 +266,9 @@ class User extends \FOS\UserBundle\Model\User
      */
     public function setDeleted($deleted)
     {
+        if(is_null($deleted)) {
+            $deleted = false;
+        }
         $this->deleted = $deleted;
 
         return $this;

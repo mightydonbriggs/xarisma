@@ -46,9 +46,9 @@ XarismaBundle\Entity\User:
             comment: ''
             column: dateUpdated
         deleted:
-            type: integer
-            nullable: false
+            type: boolean
+            nullable: true
             unsigned: false
-            default: 0
+            default: 
             comment: 'Set to true for soft delete'
     lifecycleCallbacks: {  }
