@@ -13,12 +13,11 @@ class User extends \FOS\UserBundle\Model\User
      */
     protected $id;
 
-
     /**
      * @var string
      */
-    protected $username;
-
+     protected $username;
+    
     /**
      * @var string
      */
@@ -50,7 +49,7 @@ class User extends \FOS\UserBundle\Model\User
     private $datecreated;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeset
      */
     private $dateupdated;
 
@@ -96,7 +95,6 @@ class User extends \FOS\UserBundle\Model\User
     {
         return strtoupper($this->username);
     }
-
 
     /**
      * Set firstname
@@ -170,7 +168,7 @@ class User extends \FOS\UserBundle\Model\User
     /**
      * Set roles
      *
-     * @param string $roles
+     * @param array $roles
      * @return User
      */
     public function setRoles(array $roles)
@@ -267,6 +265,9 @@ class User extends \FOS\UserBundle\Model\User
      */
     public function setDeleted($deleted)
     {
+        if(is_null($deleted)) {
+            $deleted = false;
+        }
         $this->deleted = $deleted;
 
         return $this;

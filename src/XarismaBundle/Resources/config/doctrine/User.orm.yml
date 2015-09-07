@@ -15,7 +15,6 @@ XarismaBundle\Entity\User:
                 strategy: AUTO
                 
     fields:
-
         firstname:
             type: string
             nullable: true
@@ -47,9 +46,9 @@ XarismaBundle\Entity\User:
             comment: ''
             column: dateUpdated
         deleted:
-            type: integer
-            nullable: ytur
+            type: boolean
+            nullable: true
             unsigned: false
-            default: false
+            default: 
             comment: 'Set to true for soft delete'
     lifecycleCallbacks: {  }
