@@ -53,13 +53,10 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="{{ path('custorder_track') }}"><strong>Track</strong></a></li>
+        <li class="active"><a href="{{ path('custorder_track') }}"><strong>Track</strong> <span class="sr-only">(current)</span></a></li>
         <li><a href="{{ path('customer') }}">Customers</a></li>
         <li><a href="{{ path('custorder') }}">Orders</a></li>
-        <li class="active"><a href="{{ path('worklog') }}">Worklog<span class="sr-only">(current)</span></a></li>
         <li><a href="#">Reports</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
@@ -71,6 +68,14 @@
             <li><a href="{{ path('fileops')}}">Import/Export</a></li>
           </ul>
         </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+            <li class="li_username">User: {{ app.user.username }}</li><br />
+            <a href="{{path('fos_user_security_logout')}}">[Logout]</a>
+        {% else %}
+            <a href="{{path('fos_user_security_login')}}">[Login]</a>
+        {% endif %}
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
@@ -96,7 +101,9 @@
 
         <div id="footer"{% if nocontainer is not defined or not nocontainer %} class="container hidden-print"{% endif %}>
             <hr />
+            <center>
             <strong>Xarisma, Inc.</strong> 65 Shields Rd. Huntsville, AL 35811p: 256.429.9900f: 256.746.9525e: sales@xarisma.com
+            </center>
         </div>
     
     {% endblock %}
@@ -112,4 +119,3 @@
 {% endif %}
 
 </body>
-</html>

@@ -1,5 +1,27 @@
 {% extends 'XarismaBundle:Default:base.html.twig' %}
 
 {% block body %}
-This is the default View
+
+    <div class='login' id='div_login'>
+        <div id='div_loginheader'>Login</div>
+        <table class='table_form' id='table_login'>
+            <tr class='row_form' id='row_username'>
+                <th class='th_label' id='th_username'>Username:</th>
+                <td class='td_data' id ='td_username'>
+                    <input id='txt_username' name='username'></td>
+                </td>
+            </tr>
+            <tr class='row_form' id='row_password'>
+                <th class='th_label' id='th_password'>Password:</th>
+                <td class='td_data' id ='td_password'>
+                    <input id='txt_password' name='password'>
+                </td>
+            </tr>
+            <tr>
+                <td colspan='2'>
+                    <button name='btnSubmit' id='btn_submit' value='Login'>Submit</button>
+                </td>
+            </tr>
+        </table>
+    </div>
 {% endblock %}
