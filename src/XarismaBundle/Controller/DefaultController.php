@@ -13,8 +13,6 @@ use Symfony\Component\Config\FileLocator;
         
         $list = $this->getDoctrine()->getRepository('XarismaBundle:Custorder')->findLikeId($id);
        
-dump($list);        
-        
         return $this->render('XarismaBundle:Default:index.html.twig');
     }
 }
