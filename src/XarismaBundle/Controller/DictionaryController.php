@@ -41,7 +41,7 @@ class DictionaryController extends BaseController
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('dictionary_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_dictionary_show', array('id' => $entity->getId())));
         }
 
         return $this->render('XarismaBundle:Dictionary:new.html.twig', array(
@@ -60,7 +60,7 @@ class DictionaryController extends BaseController
     private function createCreateForm(Dictionary $entity)
     {
         $form = $this->createForm(new DictionaryType(), $entity, array(
-            'action' => $this->generateUrl('dictionary_create'),
+            'action' => $this->generateUrl('admin_dictionary_create'),
             'method' => 'POST',
         ));
 
@@ -136,7 +136,7 @@ class DictionaryController extends BaseController
     private function createEditForm(Dictionary $entity)
     {
         $form = $this->createForm(new DictionaryType(), $entity, array(
-            'action' => $this->generateUrl('dictionary_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('admin_dictionary_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -163,7 +163,7 @@ class DictionaryController extends BaseController
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('dictionary_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_dictionary_edit', array('id' => $id)));
         }
 
         return $this->render('XarismaBundle:Dictionary:edit.html.twig', array(
@@ -205,7 +205,7 @@ class DictionaryController extends BaseController
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('dictionary_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('admin_dictionary_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()

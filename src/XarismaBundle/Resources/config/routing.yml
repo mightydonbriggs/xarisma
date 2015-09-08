@@ -8,7 +8,7 @@ worklog:
 
 station:
     resource: "@XarismaBundle/Resources/config/routing/station.yml"
-    prefix:   /station
+    prefix:   /admin_station
 
 custorder:
     resource: "@XarismaBundle/Resources/config/routing/custorder.yml"
@@ -16,11 +16,11 @@ custorder:
 
 user:
     resource: "@XarismaBundle/Resources/config/routing/user.yml"
-    prefix:   /user
+    prefix:   /admin_user
 
 dictionary:
     resource: "@XarismaBundle/Resources/config/routing/dictionary.yml"
-    prefix:   /dictionary
+    prefix:   /admin_dictionary
 
 customer:
     resource: "@XarismaBundle/Resources/config/routing/customer.yml"

@@ -1,30 +1,30 @@
-dictionary:
+admin_dictionary:
     path:     /
     defaults: { _controller: "XarismaBundle:Dictionary:index" }
 
-dictionary_show:
+admin_dictionary_show:
     path:     /{id}/show
     defaults: { _controller: "XarismaBundle:Dictionary:show" }
 
-dictionary_new:
+admin_dictionary_new:
     path:     /new
     defaults: { _controller: "XarismaBundle:Dictionary:new" }
 
-dictionary_create:
+admin_dictionary_create:
     path:     /create
     defaults: { _controller: "XarismaBundle:Dictionary:create" }
     methods:  POST
 
-dictionary_edit:
+admin_dictionary_edit:
     path:     /{id}/edit
     defaults: { _controller: "XarismaBundle:Dictionary:edit" }
 
-dictionary_update:
+admin_dictionary_update:
     path:     /{id}/update
     defaults: { _controller: "XarismaBundle:Dictionary:update" }
     methods:  [POST, PUT]
 
-dictionary_delete:
+admin_dictionary_delete:
     path:     /{id}/delete
     defaults: { _controller: "XarismaBundle:Dictionary:delete" }
     methods:  [POST, DELETE]

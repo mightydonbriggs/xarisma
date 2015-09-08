@@ -185,7 +185,9 @@ class User extends \FOS\UserBundle\Model\User
      */
     public function getRoles()
     {
-        return $this->roles;
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+        return $roles;
     }
 
     /**

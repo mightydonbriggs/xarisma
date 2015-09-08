@@ -60,7 +60,7 @@ class UserController extends BaseController
     private function createCreateForm(User $entity)
     {
         $form = $this->createForm(new UserType(), $entity, array(
-            'action' => $this->generateUrl('user_create'),
+            'action' => $this->generateUrl('admin_user_create'),
             'method' => 'POST',
         ));
 
@@ -136,7 +136,7 @@ class UserController extends BaseController
     private function createEditForm(User $entity)
     {
         $form = $this->createForm(new UserType(), $entity, array(
-            'action' => $this->generateUrl('user_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('admin_user_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -163,7 +163,7 @@ class UserController extends BaseController
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('user_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_user_edit', array('id' => $id)));
         }
 
         return $this->render('XarismaBundle:User:edit.html.twig', array(
@@ -205,7 +205,7 @@ class UserController extends BaseController
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('user_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('admin_user_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()

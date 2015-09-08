@@ -16,17 +16,17 @@
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('dictionary_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td><a href="{{ path('admin_dictionary_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                 <td>{{ entity.class }}</td>
                 <td>{{ entity.term }}</td>
                 <td>{{ entity.definition }}</td>
 {#                <td>
                 <ul>
                     <li>
-                        <a href="{{ path('dictionary_show', { 'id': entity.id }) }}">show</a>
+                        <a href="{{ path('admin_dictionary_show', { 'id': entity.id }) }}">show</a>
                     </li>
                     <li>
-                        <a href="{{ path('dictionary_edit', { 'id': entity.id }) }}">edit</a>
+                        <a href="{{ path('admin_dictionary_edit', { 'id': entity.id }) }}">edit</a>
                     </li>
                 </ul>
                 </td>#}
@@ -37,7 +37,7 @@
 
         <ul>
         <li>
-            <a href="{{ path('dictionary_new') }}">
+            <a href="{{ path('admin_dictionary_new') }}">
                 Create a new entry
             </a>
         </li>

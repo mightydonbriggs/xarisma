@@ -41,7 +41,7 @@ class StationController extends BaseController
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('station_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_station_show', array('id' => $entity->getId())));
         }
 
         return $this->render('XarismaBundle:Station:new.html.twig', array(
@@ -60,7 +60,7 @@ class StationController extends BaseController
     private function createCreateForm(Station $entity)
     {
         $form = $this->createForm(new StationType(), $entity, array(
-            'action' => $this->generateUrl('station_create'),
+            'action' => $this->generateUrl('admin_station_create'),
             'method' => 'POST',
         ));
 
@@ -136,7 +136,7 @@ class StationController extends BaseController
     private function createEditForm(Station $entity)
     {
         $form = $this->createForm(new StationType(), $entity, array(
-            'action' => $this->generateUrl('station_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('admin_station_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -163,7 +163,7 @@ class StationController extends BaseController
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('station_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_station_edit', array('id' => $id)));
         }
 
         return $this->render('XarismaBundle:Station:edit.html.twig', array(
@@ -205,7 +205,7 @@ class StationController extends BaseController
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('station_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('admin_station_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()

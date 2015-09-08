@@ -37,7 +37,7 @@
             {% endif %}
             <tr>
                 <td>{{ entity.action }}</td>
-                <td><a href="{{ path('fileops_show', { 'id': entity.id }) }}">{{ eventTime }}</a></td>
+                <td><a href="{{ path('admin_fileops_show', { 'id': entity.id }) }}">{{ eventTime }}</a></td>
                 <td>{{ entity.filename|split('/')|last}}</td>
                 <td>{{ entity.status }}</td>
                 <td>{{ entity.recs }}</td>
@@ -51,16 +51,20 @@
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('fileops_newimport') }}">
-                Import File
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('fileops_newexport') }}">
-                Export File
-            </a>
-        </li>
-    </ul>
-    {% endblock %}
+    {# Display Import and Export links only if user is admin#}
+    {% if app.user and is_granted('ROLE_ADMIN') %}
+        <ul>
+            <li>
+                <a href="{{ path('admin_fileops_newimport') }}">
+                    Import File
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_fileops_newexport') }}">
+                    Export File
+                </a>
+            </li>
+        </ul>
+    {% endif %}
+    
+    {% endblock body %}

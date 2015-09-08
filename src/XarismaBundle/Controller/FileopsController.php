@@ -64,7 +64,7 @@ class FileopsController extends BaseController
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('fileops_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_fileops_show', array('id' => $entity->getId())));
         }
 
         return $this->render('XarismaBundle:Fileops:new.html.twig', array(
@@ -83,7 +83,7 @@ class FileopsController extends BaseController
     private function createCreateForm(Fileops $entity)
     {
         $form = $this->createForm(new FileopsType(), $entity, array(
-            'action' => $this->generateUrl('fileops_create'),
+            'action' => $this->generateUrl('admin_fileops_create'),
             'method' => 'POST',
         ));
 
@@ -358,7 +358,7 @@ class FileopsController extends BaseController
     private function createEditForm(Fileops $entity)
     {
         $form = $this->createForm(new FileopsType(), $entity, array(
-            'action' => $this->generateUrl('fileops_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('admin_fileops_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -389,7 +389,7 @@ class FileopsController extends BaseController
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('fileops_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_fileops_edit', array('id' => $id)));
         }
 
         return $this->render('XarismaBundle:Fileops:edit.html.twig', array(
@@ -435,7 +435,7 @@ class FileopsController extends BaseController
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('fileops_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('admin_fileops_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
