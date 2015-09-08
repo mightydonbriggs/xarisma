@@ -29,11 +29,6 @@ class User extends \FOS\UserBundle\Model\User
     private $lastname;
 
     /**
-     * @var integer
-     */
-    private $accesslevel;
-
-    /**
      * @var string
      */
     protected $roles;
@@ -140,29 +135,6 @@ class User extends \FOS\UserBundle\Model\User
     public function getLastname()
     {
         return $this->lastname;
-    }
-
-    /**
-     * Set accesslevel
-     *
-     * @param integer $accesslevel
-     * @return User
-     */
-    public function setAccesslevel($accesslevel)
-    {
-        $this->accesslevel = $accesslevel;
-
-        return $this;
-    }
-
-    /**
-     * Get accesslevel
-     *
-     * @return integer 
-     */
-    public function getAccesslevel()
-    {
-        return $this->accesslevel;
     }
 
     /**

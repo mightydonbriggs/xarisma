@@ -3,63 +3,85 @@
 {% block body -%}
     <h1>User Details</h1>
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Username</th>
-                <td>{{ entity.username }}</td>
-            </tr>
-{#            <tr>
-                <th>Password</th>
-                <td>{{ entity.password }}</td>
-            </tr>#}
-            <tr>
-                <th>Firstname</th>
-                <td>{{ entity.firstname }}</td>
-            </tr>
-            <tr>
-                <th>Lastname</th>
-                <td>{{ entity.lastname }}</td>
-            </tr>
-            <tr>
-                <th>Accesslevel</th>
-                <td>{{ entity.accesslevel }}</td>
-            </tr>
-{#            <tr>
-                <th>Roles</th>
-                <td>{{ entity.roles }}</td>
-            </tr>#}
-            <tr>
-                <th>Updateby</th>
-                <td>{{ entity.updateby }}</td>
-            </tr>
-                
-            <tr>
-                <th>Created</th>
-                {% if entity.datecreated.timestamp is defined %}
-                    <td>{{ entity.datecreated|date('Y-m-d H:i:s') }}</td>
+    <table class="record_properties" id="table_user">
+        <tr>
+            <th class='th_label'>Username</th>
+            <td>{{ entity.usernameCanonical }}</td>
+        </tr>
+        <tr>
+        <tr>
+            <th class='th_label'>e-mail</th>
+            <td>{{ entity.email }}</td>
+        </tr>
+        <tr>
+            <th class='th_label'>enabled</th>
+            <td> 
+                {% if entity.enabled is sameas(true) %}
+                    True
                 {% else %}
-                    <td>Null</td>  
+                    False
                 {% endif %}
-            </tr>
-            <tr>
-                <th>Updated</th>
-                {% if entity.dateupdated.timestamp is defined %}
-                    <td>{{ entity.dateupdated|date('Y-m-d H:i:s') }}</td>
-                {% else %}
-                    <td>Null</td>  
-                {% endif %}
-            </tr>
-            
-            <tr>
-                <th>Deleted</th>
-                <td>{{ entity.deleted }}</td>
-            </tr>
-        </tbody>
+            </td>
+        </tr>
+        <tr>
+            <th class='th_label'>Roles</th>
+            <td>
+                {% for role in entity.roles %}
+                    {{ role ~', '}}
+                {% endfor %}    
+            </td>
+        </tr>
+            <td>&nbsp;</td><td>&nbsp;</td>
+        </tr>
+        <tr>
+            <th class='th_label'>First Name</th>
+            <td>{{ entity.firstname }}</td>
+        </tr>
+        <tr>
+            <th class='th_label'>Last Name</th>
+            <td>{{ entity.lastname }}</td>
+        </tr>
+        <tr>
+            <th class='th_label'>Update By</th>
+            <td>{{ entity.updateby }}</td>
+        </tr>
+        <tr>
+            <th class='th_label'>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td><td>&nbsp;</td>
+        </tr>
+
+        <tr>
+            <th class='th_label'>Created</th>
+            {% if entity.datecreated.timestamp is defined %}
+                <td>{{ entity.datecreated|date('Y-m-d H:i:s') }}</td>
+            {% else %}
+                <td>Null</td>  
+            {% endif %}
+        </tr>
+        <tr>
+            <th class='th_label'>Updated</th>
+            {% if entity.dateupdated.timestamp is defined %}
+                <td>{{ entity.dateupdated|date('Y-m-d H:i:s') }}</td>
+            {% else %}
+                <td>Null</td>  
+            {% endif %}
+        </tr>
+        <tr>
+            <th class='th_label'>Last Login</th>
+            {% if entity.lastLogin.timestamp is defined %}
+                <td>{{ entity.lastLogin|date('Y-m-d H:i:s') }}</td>
+            {% else %}
+                <td>Null</td>  
+            {% endif %}
+        </tr>
+
+        <tr>
+            <th class='th_label'>Deleted</th>
+            <td>{{ entity.deleted }}</td>
+        </tr>
     </table>
 
         <ul class="record_actions">
@@ -68,11 +90,18 @@
             Back to the list
         </a>
     </li>
+    
+    {# Display Import and Export links only if user is admin#}
+    {% if app.user and is_granted('ROLE_ADMIN') %}    
     <li>
         <a href="{{ path('admin_user_edit', { 'id': entity.id }) }}">
             Edit
         </a>
     </li>
     <li>{{ form(delete_form) }}</li>
+    {% endif %}
 </ul>
+    
+{{ dump(entity) }}    
+    
 {% endblock %}

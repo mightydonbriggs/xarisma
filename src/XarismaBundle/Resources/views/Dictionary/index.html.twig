@@ -20,26 +20,20 @@
                 <td>{{ entity.class }}</td>
                 <td>{{ entity.term }}</td>
                 <td>{{ entity.definition }}</td>
-{#                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('admin_dictionary_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('admin_dictionary_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>#}
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-        <ul>
+    {# Display Import and Export links only if user is admin#}
+    {% if app.user and is_granted('ROLE_ADMIN') %}        
+    <ul>
         <li>
             <a href="{{ path('admin_dictionary_new') }}">
                 Create a new entry
             </a>
         </li>
     </ul>
-    {% endblock %}
+    {% endif %}
+    
+    {% endblock body %}

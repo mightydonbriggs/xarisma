@@ -44,17 +44,17 @@ VALUES
 delete from  `user` where id < 10000;
 
 INSERT INTO `user`
-  (`username`, `password`, `firstName`, `lastName`, `accessLevel`, `dateCreated`, `dateUpdated`, `Deleted`)
+  (`username`, `password`, `firstName`, `lastName`, `dateCreated`, `dateUpdated`, `Deleted`)
 VALUES
   ('admin', 'admin', 'Admin User', '', 100, now(), null, 0);
 
 INSERT INTO `user`
-  (`username`, `password`, `firstName`, `lastName`, `accessLevel`,`dateCreated`, `dateUpdated`, `Deleted`)
+  (`username`, `password`, `firstName`, `lastName`, `dateCreated`, `dateUpdated`, `Deleted`)
 VALUES
   ('dbriggs', 'dbriggs', 'Don', 'Briggs', 90, now(), null, 0);
 
 INSERT INTO `user`
-  (`username`, `password`, `firstName`, `lastName`, `accessLevel`, `dateCreated`, `dateUpdated`, `Deleted`)
+  (`username`, `password`, `firstName`, `lastName`, `dateCreated`, `dateUpdated`, `Deleted`)
 VALUES
   ('gbrown', 'gbrown', 'Greg', 'Brown', 90, now(), null, 0);
 

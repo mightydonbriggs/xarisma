@@ -28,4 +28,4 @@ security:
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/customer/, role: ROLE_USER }
         - { path: ^/order/, role: ROLE_USER }
-        - { path: ^/admin_, role: ROLE_ADMIN }
+        - { path: ^/admin_, role: ROLE_USER }

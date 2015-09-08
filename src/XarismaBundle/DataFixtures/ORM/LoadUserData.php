@@ -23,7 +23,6 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setUsername('admin');
         $user->setPassword('admin');
         $user->setFirstname('Admin User');
-        $user->setAccesslevel(100);
         $user->setDeleted(0);
         $manager->persist($user);
 
@@ -32,7 +31,6 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setPassword('dbriggs');
         $user->setFirstname('Don');
         $user->setLastname('Briggs');
-        $user->setAccesslevel(90);
         $user->setDeleted(0);
         $manager->persist($user);
 
@@ -41,7 +39,6 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setPassword('gbrown');
         $user->setFirstname('Gregg');
         $user->setLastname('Brown');
-        $user->setAccesslevel(90);
         $user->setDeleted(0);
         $manager->persist($user);
 

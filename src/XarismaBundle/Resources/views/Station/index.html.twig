@@ -33,11 +33,13 @@
         </tbody>
     </table>
 
-        <ul>
+    {# Display Import and Export links only if user is admin#}
+    {% if app.user and is_granted('ROLE_ADMIN') %}        
+    <ul>
         <li>
-            <a href="{{ path('admin_station_new') }}">
-                Create a new entry
-            </a>
+            <a href="{{ path('admin_station_new') }}">Create a new entry</a>
         </li>
     </ul>
-    {% endblock %}
+    {% endif %}
+    
+    {% endblock body %}

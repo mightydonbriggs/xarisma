@@ -10,3 +10,11 @@ defined here.
 .table-hover tbody tr:hover > td.success {
   background-color: #d0e9c6 !important;
 }
+
+table.record_properties {
+    background-color: #e8e8e8;
+}
+
+th.th_label {
+    padding-right: 15px;
+}

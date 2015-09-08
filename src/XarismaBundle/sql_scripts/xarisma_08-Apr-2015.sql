@@ -152,7 +152,6 @@ CREATE TABLE `user` (
   `password` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `firstName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `lastName` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `accessLevel` int(11) NOT NULL,
   `roles` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `updateBy` int(11) DEFAULT NULL,
   `dateCreated` datetime DEFAULT NULL,

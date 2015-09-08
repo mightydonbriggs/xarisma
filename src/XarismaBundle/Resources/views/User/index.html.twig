@@ -10,8 +10,6 @@
                 <th>Username</th>
                 <th>Firstname</th>
                 <th>Lastname</th>
-                <th>Accesslevel</th>
-{#                <th>Actions</th>#}
             </tr>
         </thead>
         <tbody>
@@ -21,27 +19,20 @@
                 <td>{{ entity.username }}</td>
                 <td>{{ entity.firstname }}</td>
                 <td>{{ entity.lastname }}</td>
-                <td>{{ entity.accesslevel }}</td>
-{#                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('admin_user_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('admin_user_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>#}
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-        <ul>
+    {# Display Import and Export links only if user is admin#}
+    {% if app.user and is_granted('ROLE_ADMIN') %}
+    <ul>
         <li>
             <a href="{{ path('admin_user_new') }}">
                 Create a new entry
             </a>
         </li>
     </ul>
-    {% endblock %}
+    {% endif %}
+    
+    {% endblock body %}
